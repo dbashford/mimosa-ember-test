@@ -1,0 +1,45 @@
+{
+  "name": "mimosa-ember-test",
+  "version": "0.1.0",
+  "homepage": "https://github.com/dbashford/mimosa-ember-test",
+  "author": "David Bashford",
+  "description": "A Mimosa module for testing Ember apps",
+  "contributors": [
+    {
+      "name": "David Bashford",
+      "email": "dbashford@hotmail.com"
+    },
+    {
+      "name": "Estelle DeBlois",
+      "email": "edeblois@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbashford/mimosa-ember-test"
+  },
+  "keywords": [
+    "mimosa",
+    "mmodule",
+    "testem",
+    "testing",
+    "requirejs",
+    "qunit",
+    "sinon",
+    "ember",
+    "emberjs"
+  ],
+  "dependencies": {
+    "wrench": "1.5.8",
+    "lodash": "2.4.1",
+    "mimosa-testem-simple": "0.9.1"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.8"
+  },
+  "main": "./lib/index",
+  "scripts": {
+    "prepublish": "mimosa build"
+  }
+}
