@@ -11,7 +11,7 @@ This module incorporates [QUnit](http://qunitjs.com/), [ember-qunit](https://git
 
 For more information regarding Mimosa, see http://mimosa.io
 
-NOTE: This module requires Mimosa `2.3.9` to function properly, if this is an issue, please file a GitHub request to address.
+NOTE: This module requires Mimosa `2.3.10` to function properly, if this is an issue, please file a GitHub request to address.
 
 ## Usage
 

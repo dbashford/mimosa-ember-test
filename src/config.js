@@ -151,14 +151,14 @@ exports.validate = function( config, validators ) {
     }
 
 
-    validators.ifExistsIsBoolean( errors, "emberTest.executeDuringBuild", et.executeDuringBuild );
-    validators.ifExistsIsBoolean( errors, "emberTest.executeDuringWatch", et.executeDuringWatch );
-    if ( validators.ifExistsIsString( errors, "emberTest.assetFolder", et.assetFolder ) ) {
+    validators.isBoolean( errors, "emberTest.executeDuringBuild", et.executeDuringBuild );
+    validators.isBoolean( errors, "emberTest.executeDuringWatch", et.executeDuringWatch );
+    if ( validators.isString( errors, "emberTest.assetFolder", et.assetFolder ) ) {
       et.assetFolderFull = path.join( config.root, et.assetFolder );
     }
     validators.ifExistsIsObject( errors, "emberTest.testemConfig", et.testemConfig );
     validators.ifExistsIsArrayOfStrings( errors, "emberTest.safeAssets", et.safeAssets );
-    validators.ifExistsIsString( errors, "emberTest.emberAMDPath", et.emberAMDPath );
+    validators.isString( errors, "emberTest.emberAMDPath", et.emberAMDPath );
     validators.isRegex( errors, "emberTest.specConvention", et.specConvention );
 
     if ( et.assetFolderFull ) {
