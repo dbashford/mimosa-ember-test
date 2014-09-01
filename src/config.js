@@ -11,7 +11,6 @@ exports.defaults = function() {
     apps: [{
       testLocation: "tests",
       testAppFactory: "create_test_app",
-      testPrerequisitePaths: [],
       stylesheetPaths: [],
       requireConfig: null
     }],
@@ -39,9 +38,6 @@ exports.placeholder = function() {
     "      testAppFactory: \"create_test_app\"  # Location, relative to testLocation, where a file\n" +
     "                                  # exporting a function capable of generating a test-ready\n" +
     "                                  # version of this ember app is located\n" +
-    "      testPrerequisitePaths: []   # AMD paths to files that need to be imported prior to tests\n" +
-    "                                  # being run. While these files can export something, ember-test\n" +
-    "                                  # will only require in the files and not doing anything with them\n" +
     "      stylesheetPaths: []         # Paths to stylesheets necessary to properly run integration\n" +
     "                                  # tests for this app. Example: \"/public/stylesheets/vendor.css\"\n" +
     "      requireConfig: null         # RequireJS configuration. By default the mimosa-require\n" +
@@ -107,16 +103,64 @@ exports.validate = function( config, validators ) {
   }
 
   if ( validators.ifExistsIsObject(errors, "emberTest config", config.emberTest ) ) {
-    validators.ifExistsIsBoolean( errors, "emberTest.executeDuringBuild", config.emberTest.executeDuringBuild );
-    validators.ifExistsIsBoolean( errors, "emberTest.executeDuringWatch", config.emberTest.executeDuringWatch );
-    if ( validators.ifExistsIsString( errors, "emberTest.assetFolder", config.emberTest.assetFolder ) ) {
-      config.emberTest.assetFolderFull = path.join( config.root, config.emberTest.assetFolder );
-    }
-    validators.ifExistsIsObject( errors, "emberTest.testemConfig", config.emberTest.testemConfig );
-    validators.ifExistsIsObject( errors, "emberTest.requireConfig", config.emberTest.requireConfig );
-    validators.ifExistsIsArrayOfStrings( errors, "emberTest.safeAssets", config.emberTest.safeAssets );
+    var et = config.emberTest;
 
-    config.testemSimple.configFile = path.join( config.emberTest.assetFolderFull, "testem.json" );
+    if ( validators.ifExistsIsArrayOfObjects( errors, "emberTest.apps", et.apps ) ) {
+      if ( !et.apps.length ) {
+        errors.push( "emberTest.apps must contain at least one entry" );
+      } else {
+        et.apps.forEach( function( app ) {
+
+          if ( app.requireConfig ) {
+            var o = app.requireConfig;
+            if ( typeof o !== "function" && (typeof o !== "object" || Array.isArray( o ) ) ) {
+              errors.push( "emberTest.apps.requireConfig must be a function or an object" );
+            }
+          }
+
+          var testLocationGood = false;
+          if ( !app.testLocation ) {
+            errors.push( "emberTest.apps.testLocation must be provided." );
+          } else {
+            if ( validators.ifExistsIsString( errors, "emberTest.apps.testLocation", app.testLocation ) ) {
+              app.testLocationFull = path.join( config.watch.sourceDir, config.watch.javascriptDir, app.testLocation );
+              if ( !fs.existsSync( app.testLocationFull ) ) {
+                errors.push( "emberTest.apps.testLocation does not exist, resolved to " + app.testLocationFull );
+              } else {
+                testLocationGood = true;
+              }
+            }
+          }
+
+          if ( !app.testAppFactory ) {
+            errors.push( "emberTest.apps.testAppFactory must be provided." );
+          } else {
+            if ( validators.ifExistsIsString( errors, "emberTest.apps.testAppFactory", app.testAppFactory ) ) {
+              if ( testLocationGood ) {
+                app.testAppFactoryFull = path.join( app.testLocationFull, app.testAppFactory + ".js" );
+                if ( !fs.existsSync( app.testAppFactoryFull ) ) {
+                  errors.push( "emberTest.apps.testAppFactory does not exist, resolved to " + app.testAppFactoryFull );
+                }
+              }
+            }
+          }
+
+          validators.ifExistsIsArrayOfStrings( errors, "emberTest.apps.stylesheetPaths", et.stylesheetPaths );
+        });
+      }
+    }
+
+
+    validators.ifExistsIsBoolean( errors, "emberTest.executeDuringBuild", et.executeDuringBuild );
+    validators.ifExistsIsBoolean( errors, "emberTest.executeDuringWatch", et.executeDuringWatch );
+    if ( validators.ifExistsIsString( errors, "emberTest.assetFolder", et.assetFolder ) ) {
+      et.assetFolderFull = path.join( config.root, et.assetFolder );
+    }
+    validators.ifExistsIsObject( errors, "emberTest.testemConfig", et.testemConfig );
+    validators.ifExistsIsArrayOfStrings( errors, "emberTest.safeAssets", et.safeAssets );
+    validators.ifExistsIsString( errors, "emberTest.emberAMDPath", et.emberAMDPath );
+
+    config.testemSimple.configFile = path.join( et.assetFolderFull, "testem.json" );
   }
 
   return errors;
