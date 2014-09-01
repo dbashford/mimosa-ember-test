@@ -132,7 +132,75 @@ describe('Will error out on start up', function() {
       " * emberTest.safeAssets must be an array of strings.\n" +
       " * emberTest.emberAMDPath must be a string.\n" +
       " * emberTest.specConvention must be a RegExp. \n";
-            
+
+    standardErr = standardErr.split("\n").splice(1).join("\n");
+    expect( standardErr ).to.equal( expected );
+  });
+});
+
+
+describe('Will error out on start up', function() {
+  this.timeout(15000);
+
+  var env = utils.setupProjectData( "bad-config4")
+  var standardErr;
+
+  before(function(done){
+    utils.cleanProject( env );
+    utils.setupProject( env, "defaults" );
+
+    var cwd = process.cwd();
+    process.chdir( env.projectDir );
+    exec( "mimosa build", function ( err, sout, serr ) {
+      standardErr = serr;
+      done();
+      process.chdir(cwd);
+    });
+  });
+
+  after(function() {
+    utils.cleanProject( env );
+  });
+
+  it( 'when no app data is provided, 4', function() {
+    var expected =
+      " * emberTest.apps.testLocation must be provided.\n" +
+      " * emberTest.apps.testAppFactory must be provided. \n";
+
+    standardErr = standardErr.split("\n").splice(1).join("\n");
+    expect( standardErr ).to.equal( expected );
+  });
+});
+
+describe('Will error out on start up', function() {
+  this.timeout(15000);
+
+  var env = utils.setupProjectData( "bad-config5")
+  var standardErr;
+
+  before(function(done){
+    utils.cleanProject( env );
+    utils.setupProject( env, "defaults" );
+
+    var cwd = process.cwd();
+    process.chdir( env.projectDir );
+    exec( "mimosa build", function ( err, sout, serr ) {
+      standardErr = serr;
+      done();
+      process.chdir(cwd);
+    });
+  });
+
+  after(function() {
+    utils.cleanProject( env );
+  });
+
+  it( 'when all app data is bad, 5', function() {
+    var expected =
+      " * emberTest.apps.requireConfig must be a function or an object\n" +
+      " * emberTest.apps.testLocation must be a string.\n" +
+      " * emberTest.apps.testAppFactory must be a string. \n";
+
     standardErr = standardErr.split("\n").splice(1).join("\n");
     expect( standardErr ).to.equal( expected );
   });
