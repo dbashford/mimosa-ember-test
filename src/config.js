@@ -159,8 +159,11 @@ exports.validate = function( config, validators ) {
     validators.ifExistsIsObject( errors, "emberTest.testemConfig", et.testemConfig );
     validators.ifExistsIsArrayOfStrings( errors, "emberTest.safeAssets", et.safeAssets );
     validators.ifExistsIsString( errors, "emberTest.emberAMDPath", et.emberAMDPath );
+    validators.isRegex( errors, "emberTest.specConvention", et.specConvention );
 
-    config.testemSimple.configFile = path.join( et.assetFolderFull, "testem.json" );
+    if ( et.assetFolderFull ) {
+      config.testemSimple.configFile = path.join( et.assetFolderFull, "testem.json" );
+    }
   }
 
   return errors;
