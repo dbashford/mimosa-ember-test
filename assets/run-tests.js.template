@@ -1,0 +1,26 @@
+QUnit.config.autostart = false;
+
+require.config(window.MIMOSA_TEST_REQUIRE_CONFIG);
+
+require(['<%= emberPath %>'], function() {
+  // change baseUrl to point to .mimosa/emberTest to
+  // to pull in ember-qunit, tests assets not in app
+  require.config({ "baseUrl": "/js-test" });
+
+  require(['ember-qunit/main'], function(emberQUnit) {
+    // inject ember-qunit test helpers onto window
+    emberQUnit.globalize();
+
+    // point back at the app for all other things
+    require.config({ "baseUrl": "/js "});
+
+    require(['<%= testApp %>', '../testem'], function(testApp) {
+      var App = (testApp['default'] || testApp)();
+      setResolver(Ember.DefaultResolver.create({ namespace: App }));
+
+      require(window.MIMOSA_TEST_SPECS, function(module) {
+        QUnit.start();
+      });
+    });
+  });
+});
