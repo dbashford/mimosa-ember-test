@@ -1,37 +1,6 @@
 var  exec = require('child_process').exec
 , utils = require( './util' )
 
-describe('Will error out on start up', function() {
-  this.timeout(15000);
-
-  var env = utils.setupProjectData( "bad-config1")
-  var standardErr;
-
-  before(function(done){
-    utils.cleanProject( env );
-    utils.setupProject( env, "defaults" );
-
-    var cwd = process.cwd();
-    process.chdir( env.projectDir );
-    exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
-      done();
-      process.chdir(cwd);
-    });
-  });
-
-  after(function() {
-    utils.cleanProject( env );
-  });
-
-  it( 'for testem-simple errors, 1', function() {
-    var expected =
-      " * testemSimple.configFile must be a string. \n";
-    standardErr = standardErr.split("\n").splice(1).join("\n");
-    expect( standardErr ).to.equal( expected );
-  });
-});
-
 describe('Will NOT error out on start up', function() {
   this.timeout(15000);
 
@@ -62,146 +31,81 @@ describe('Will NOT error out on start up', function() {
   });
 });
 
-describe('Will error out on start up', function() {
-  this.timeout(15000);
+var test = function( config, itDesc, expected ) {
+  describe('Will error out on start up', function() {
+    this.timeout(15000);
 
-  var env = utils.setupProjectData( "bad-config2")
-  var standardErr;
+    var env = utils.setupProjectData( config );
+    var standardErr;
 
-  before(function(done){
-    utils.cleanProject( env );
-    utils.setupProject( env, "defaults" );
+    before(function(done){
+      utils.cleanProject( env );
+      utils.setupProject( env, "defaults" );
 
-    var cwd = process.cwd();
-    process.chdir( env.projectDir );
-    exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
-      done();
-      process.chdir(cwd);
+      var cwd = process.cwd();
+      process.chdir( env.projectDir );
+      exec( "mimosa build", function ( err, sout, serr ) {
+        standardErr = serr;
+        done();
+        process.chdir(cwd);
+      });
+    });
+
+    after(function() {
+      utils.cleanProject( env );
+    });
+
+    it( itDesc, function() {
+      standardErr = standardErr.split("\n").splice(1).join("\n");
+      expect( standardErr ).to.equal( expected );
     });
   });
+};
 
-  after(function() {
-    utils.cleanProject( env );
-  });
+var expected1 =
+  " * testemSimple.configFile must be a string. \n";
+test("bad-config1", "for testem-simple errors, 1", expected1);
 
-  it( 'when its all so so bad, 2', function() {
-    var expected =
-      " * emberTest.apps must be an array.\n" +
-      " * emberTest.executeDuringBuild must be a boolean.\n" +
-      " * emberTest.executeDuringWatch must be a boolean.\n" +
-      " * emberTest.assetFolder must be a string.\n" +
-      " * emberTest.testemConfig must be an object.\n" +
-      " * emberTest.safeAssets must be an array.\n" +
-      " * emberTest.emberAMDPath must be a string.\n" +
-      " * emberTest.specConvention must be a RegExp. \n";
-    standardErr = standardErr.split("\n").splice(1).join("\n");
-    expect( standardErr ).to.equal( expected );
-  });
-});
+var expected2 =
+  " * emberTest.apps must be an array.\n" +
+  " * emberTest.executeDuringBuild must be a boolean.\n" +
+  " * emberTest.executeDuringWatch must be a boolean.\n" +
+  " * emberTest.assetFolder must be a string.\n" +
+  " * emberTest.testemConfig must be an object.\n" +
+  " * emberTest.safeAssets must be an array.\n" +
+  " * emberTest.emberAMDPath must be a string.\n" +
+  " * emberTest.specConvention must be a RegExp. \n";
+test("bad-config2", "when its all so so bad, 2", expected2);
 
-describe('Will error out on start up', function() {
-  this.timeout(15000);
+var expected3 =
+  " * emberTest.apps must contain at least one entry\n" +
+  " * emberTest.executeDuringBuild must be a boolean.\n" +
+  " * emberTest.executeDuringWatch must be a boolean.\n" +
+  " * emberTest.assetFolder must be a string.\n" +
+  " * emberTest.safeAssets must be an array of strings.\n" +
+  " * emberTest.emberAMDPath must be a string.\n" +
+  " * emberTest.specConvention must be a RegExp. \n";
+test("bad-config3", "when its all so so bad, 3", expected3);
 
-  var env = utils.setupProjectData( "bad-config3")
-  var standardErr;
+var expected4 =
+  " * emberTest.apps.testLocation must be provided.\n" +
+  " * emberTest.apps.testAppFactory must be provided. \n";
+test("bad-config4", "when no app data is provided, 4", expected4);
 
-  before(function(done){
-    utils.cleanProject( env );
-    utils.setupProject( env, "defaults" );
+var expected5 =
+  " * emberTest.apps.requireConfig must be a function or an object\n" +
+  " * emberTest.apps.testLocation must be a string.\n" +
+  " * emberTest.apps.testAppFactory must be a string.\n" +
+  " * emberTest.apps.stylesheetPaths must be an array. \n";
+test("bad-config5", "when all app data is bad, 5", expected5);
 
-    var cwd = process.cwd();
-    process.chdir( env.projectDir );
-    exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
-      done();
-      process.chdir(cwd);
-    });
-  });
+var expected6 =
+  " * emberTest.apps.testLocation must be provided.\n" +
+  " * emberTest.apps.testAppFactory must be provided. \n";
+test("bad-config6", "when all app data is null, 6", expected6);
 
-  after(function() {
-    utils.cleanProject( env );
-  });
+var expected7 =
+  " * emberTest.apps.testLocation does not exist, resolved to /Users/dbashford/mygithub/mimosa-ember-test/test/bad-config7/assets/javascripts/foo\n" +
+  " * emberTest.apps.stylesheetPaths must be an array. \n";
+test("bad-config7", "when paths are bad, 7", expected7);
 
-  it( 'when its all so so bad, 3', function() {
-    var expected =
-      " * emberTest.apps must contain at least one entry\n" +
-      " * emberTest.executeDuringBuild must be a boolean.\n" +
-      " * emberTest.executeDuringWatch must be a boolean.\n" +
-      " * emberTest.assetFolder must be a string.\n" +
-      " * emberTest.safeAssets must be an array of strings.\n" +
-      " * emberTest.emberAMDPath must be a string.\n" +
-      " * emberTest.specConvention must be a RegExp. \n";
-
-    standardErr = standardErr.split("\n").splice(1).join("\n");
-    expect( standardErr ).to.equal( expected );
-  });
-});
-
-
-describe('Will error out on start up', function() {
-  this.timeout(15000);
-
-  var env = utils.setupProjectData( "bad-config4")
-  var standardErr;
-
-  before(function(done){
-    utils.cleanProject( env );
-    utils.setupProject( env, "defaults" );
-
-    var cwd = process.cwd();
-    process.chdir( env.projectDir );
-    exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
-      done();
-      process.chdir(cwd);
-    });
-  });
-
-  after(function() {
-    utils.cleanProject( env );
-  });
-
-  it( 'when no app data is provided, 4', function() {
-    var expected =
-      " * emberTest.apps.testLocation must be provided.\n" +
-      " * emberTest.apps.testAppFactory must be provided. \n";
-
-    standardErr = standardErr.split("\n").splice(1).join("\n");
-    expect( standardErr ).to.equal( expected );
-  });
-});
-
-describe('Will error out on start up', function() {
-  this.timeout(15000);
-
-  var env = utils.setupProjectData( "bad-config5")
-  var standardErr;
-
-  before(function(done){
-    utils.cleanProject( env );
-    utils.setupProject( env, "defaults" );
-
-    var cwd = process.cwd();
-    process.chdir( env.projectDir );
-    exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
-      done();
-      process.chdir(cwd);
-    });
-  });
-
-  after(function() {
-    utils.cleanProject( env );
-  });
-
-  it( 'when all app data is bad, 5', function() {
-    var expected =
-      " * emberTest.apps.requireConfig must be a function or an object\n" +
-      " * emberTest.apps.testLocation must be a string.\n" +
-      " * emberTest.apps.testAppFactory must be a string. \n";
-
-    standardErr = standardErr.split("\n").splice(1).join("\n");
-    expect( standardErr ).to.equal( expected );
-  });
-});

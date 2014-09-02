@@ -145,7 +145,7 @@ exports.validate = function( config, validators ) {
             }
           }
 
-          validators.ifExistsIsArrayOfStrings( errors, "emberTest.apps.stylesheetPaths", et.stylesheetPaths );
+          validators.ifExistsIsArrayOfStrings( errors, "emberTest.apps.stylesheetPaths", app.stylesheetPaths );
         });
       }
     }
