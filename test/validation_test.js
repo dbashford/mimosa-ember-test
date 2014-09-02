@@ -112,3 +112,8 @@ test("bad-config7", "when paths are bad, 7", expected7);
 var expected8 =
   " * emberTest.apps.testAppFactory does not exist, resolved to /Users/dbashford/mygithub/mimosa-ember-test/test/bad-config8/assets/javascripts/tests/foo.js \n";
 test("bad-config8", "when paths are bad, 8", expected8);
+
+var expected9 =
+  " * emberTest.apps.testLocation must be provided.\n" +
+  " * emberTest.apps.testAppFactory must be provided. \n";
+test("bad-config9", "when a 2nd app isn't configured right, 9", expected9);
