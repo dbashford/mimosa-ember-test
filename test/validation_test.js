@@ -106,6 +106,9 @@ test("bad-config6", "when all app data is null, 6", expected6);
 
 var expected7 =
   " * emberTest.apps.testLocation does not exist, resolved to /Users/dbashford/mygithub/mimosa-ember-test/test/bad-config7/assets/javascripts/foo\n" +
-  " * emberTest.apps.stylesheetPaths must be an array. \n";
+  " * emberTest.apps.stylesheetPaths must be an array of strings. \n";
 test("bad-config7", "when paths are bad, 7", expected7);
 
+var expected8 =
+  " * emberTest.apps.testAppFactory does not exist, resolved to /Users/dbashford/mygithub/mimosa-ember-test/test/bad-config8/assets/javascripts/tests/foo.js \n";
+test("bad-config8", "when paths are bad, 8", expected8);

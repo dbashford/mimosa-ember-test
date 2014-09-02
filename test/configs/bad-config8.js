@@ -1,10 +1,9 @@
 exports.config = {
   emberTest:{
     apps: [{
-      testLocation: "foo",
+      testLocation: "tests",
       testAppFactory: "foo",
-      stylesheetPaths: [1, 2],
-      requireConfig: {}
+      stylesheetPaths: ["foo", "bar"]
     }]
   },
   modules: [
