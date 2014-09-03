@@ -15,7 +15,7 @@
 
     <script src="qunit.js"></script>
     <script src="sinon.js"></script>
-    <script src="require.min.js"></script>
+    <script src="require.js"></script>
     <script src="test-variables.js"></script>
     <script src="<%= testRunnerJS %>"></script>
   </head>

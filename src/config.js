@@ -69,6 +69,72 @@ exports.placeholder = function() {
   return ph;
 };
 
+var _handleBower = function( config ) {
+
+  var hasBower = config.modules.some( function( mod ) {
+    return mod.indexOf("bower") === 0 || mod.indexOf("mimosa-bower") === 0;
+  });
+
+  if ( hasBower ) {
+    var b = config.bower
+      , relativeVendorToAssets = path.relative( config.vendor.javascripts, config.emberTest.assetFolderFull );
+
+    var libraryPlacementConfig = {
+      qunit : {
+        "qunit/qunit.js": relativeVendorToAssets + "/qunit.js",
+        "qunit/qunit.css": relativeVendorToAssets + "/qunit.css"
+      },
+      requirejs: {
+        "require.js": relativeVendorToAssets + "/require.js"
+      },
+      sinonjs: {
+        "sinon.js": relativeVendorToAssets + "/sinon.js"
+      },
+      "ember-qunit": {
+        "dist/amd": relativeVendorToAssets + "/ember-qunit"
+      }
+    };
+
+    // unlikely
+    if ( !b.copy ) {
+      b.copy = {};
+    }
+
+    // will be inserting overrides
+    if ( !b.copy.mainOverrides ) {
+      b.copy.mainOverrides = {};
+    }
+
+    // if pathFull exists, then mimosa-bower has already done
+    // its validation (earlier in list of modules), so any
+    // validation-created objects need to be created now
+    if ( b.bowerDir.pathFull ) {
+      // will be inserting overridesObjects
+      if ( !b.copy.overridesObjects ) {
+        b.copy.overridesObjects = {};
+      }
+    }
+
+    Object.keys( libraryPlacementConfig ).forEach( function( lib ) {
+      // don't overwrite if its already there
+      if ( !b.copy.mainOverrides[lib] ) {
+        b.copy.mainOverrides[lib] = [ libraryPlacementConfig[lib] ];
+        if ( b.bowerDir.pathFull ) {
+          b.copy.overridesObjects[lib] = libraryPlacementConfig[lib];
+        }
+      }
+    });
+
+    // need to exclude ember-data
+    if (!b.copy.exclude) {
+      b.copy.exclude = [];
+    }
+    var pathToEmberData = path.join( config.root, b.bowerDir.path, "ember-data", "ember-data.js" );
+    b.copy.exclude.push( pathToEmberData );
+
+  }
+};
+
 exports.validate = function( config, validators ) {
 
   var errors = [];
@@ -165,54 +231,8 @@ exports.validate = function( config, validators ) {
     }
   }
 
-  // playing with bower
-
-  var hasBower = config.modules.some( function( mod ) {
-    return mod.indexOf("bower") === 0 || mod.indexOf("mimosa-bower") === 0;
-  });
-
-  if ( errors.length === 0 && hasBower ) {
-    var b = config.bower
-     , relativeVendorToAssets = path.relative( config.vendor.javascripts, config.emberTest.assetFolderFull );
-
-    // hrm, paths, not enirely sure how this will work on windows
-    // have unix paths always worked for bower paths on windows?
-    var qunitArray = [{
-      "qunit/qunit.js": relativeVendorToAssets + "/qunit.js",
-      "qunit/qunit.css": relativeVendorToAssets + "/qunit.css"
-    }];
-
-    // unlikely
-    if ( !b.copy ) {
-      b.copy = {};
-    }
-
-    // will be inserting overrides
-    if ( !b.copy.mainOverrides ) {
-      b.copy.mainOverrides = {};
-    }
-
-    // TODO: iterate over various vendor test scripts and insert them
-    // don't write over qunit if its already there
-    if ( !b.copy.mainOverrides.qunit ) {
-      b.copy.mainOverrides.qunit = qunitArray;
-    }
-
-    // if pathFull exists, then mimosa-bower has already done
-    // its validation, so any validation-created objects need
-    // to be created now
-    if ( b.bowerDir.pathFull ) {
-      // will be inserting overridesObjects
-      if ( !b.copy.overridesObjects ) {
-        b.copy.overridesObjects = {};
-      }
-
-      // TODO: iterate over various vendor test scripts and insert them
-      // don't write over qunit if its already there
-      if ( !b.copy.overridesObjects.qunit ) {
-        b.copy.overridesObjects.qunit = qunitArray[0];
-      }
-    }
+  if ( errors.length === 0 ) {
+    _handleBower( config );
   }
 
   return errors;
