@@ -100,7 +100,7 @@ var registration = function( mimosaConfig, register ) {
     register( ["postBuild"], "init", staticAssets.writeStaticAssets );
   }
 
-  // register( ["postBuild"], "init", writeTestem.writeTestemConfig );
+  register( ["postBuild"], "init", writeTestem.writeTestemConfig );
 
   /*
 

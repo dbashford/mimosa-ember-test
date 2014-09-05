@@ -33,7 +33,15 @@ exports.writeTestemConfig = function( mimosaConfig, options, next ) {
   var baseTestemConfig = _craftBaseTestemConfig( mimosaConfig, _.clone( currentTestemConfig ) );
 
   // write runner per-app
+  var moreThanOne = mimosaConfig.emberTest.apps.length > 1;
   mimosaConfig.emberTest.apps.forEach( function( app, i ) {
+
+    if ( !moreThanOne ) {
+      i = "";
+    } else {
+      i += 1;
+    }
+
     // add test runner page
     /*eslint camelcase:0 */
     var testemConfig = _.extend(
@@ -44,7 +52,12 @@ exports.writeTestemConfig = function( mimosaConfig, options, next ) {
 
     if( JSON.stringify( currentTestemConfig, null, 2 ) !== testemConfigPretty ) {
       mimosaConfig.log.debug( "Writing testem configuration to [[ " + mimosaConfig.testemSimple.configFile + " ]]" );
-      fs.writeFileSync( mimosaConfig.testemSimple.configFile, testemConfigPretty );
+      var fileName = mimosaConfig.testemSimple.configFile;
+      if ( moreThanOne ) {
+        var ext = path.extname( mimosaConfig.testemSimple.configFile );
+        fileName = fileName.replace( ext, i + ext );
+      }
+      fs.writeFileSync( fileName, testemConfigPretty );
     }
   });
 
