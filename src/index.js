@@ -8,22 +8,14 @@ var path = require( "path" )
   , testemSimple = require( "mimosa-testem-simple" )
 
   , config = require( "./config" )
+  , staticAssets = require( "./tasks/static-assets" )
 
   , specFiles = []
   , requireConfig = {}
   , mimosaRequire = null
   , lastOutputString = null
   , testVariablesPath = null
-  , logger = null
-  , allAssets = [
-    "qunit.css",
-    "runner.html",
-    "run-tests.js",
-    "require.min.js",
-    "qunit.js",
-    "sinon.js"].map( function (asset) {
-    return path.join( __dirname, "..", "assets", asset );
-  });
+  , logger = null;
 
 var _buildRequireConfig = function( mimosaConfig, options, next ) {
 
@@ -94,34 +86,6 @@ var _ensureDirectory = function( mimosaConfig, options, next ) {
   next();
 };
 
-var __writeFile = function( inPath, outPath ) {
-  logger.debug( "Writing mimosa-ember-test file [[ " + outPath + " ]]" );
-  var fileText = fs.readFileSync( inPath, "utf8" );
-  fs.writeFileSync( outPath, fileText );
-};
-
-var _writeStaticAssets = function( mimosaConfig, options, next ) {
-  var tr = mimosaConfig.emberTest;
-
-  allAssets.filter( function ( asset ) {
-    return tr.safeAssets.indexOf( path.basename( asset ) ) === -1;
-  }).forEach( function( asset ) {
-    var fileName = path.basename( asset );
-    var outFile = path.join( tr.assetFolderFull, fileName );
-    if( fs.existsSync( outFile ) ) {
-      var statInFile = fs.statSync( asset );
-      var statOutFile = fs.statSync( outFile );
-      if ( statInFile.mtime > statOutFile.mtime ) {
-        __writeFile( asset, outFile );
-      }
-    } else {
-      __writeFile( asset, outFile );
-    }
-  });
-
-  next();
-};
-
 var __craftTestemConfig = function ( mimosaConfig, currentTestemConfig ) {
   /*eslint camelcase:0 */
   currentTestemConfig.test_page = mimosaConfig.emberTest.assetFolder + "/runner.html";
@@ -169,7 +133,13 @@ var registration = function( mimosaConfig, register ) {
   }
 
   register( ["postBuild"], "init", _ensureDirectory );
-  register( ["postBuild"], "init", _writeStaticAssets );
+
+  */
+
+  register( ["postBuild"], "init", staticAssets.writeStaticAssets );
+
+  /*
+
   register( ["postBuild"], "init", _writeTestemConfig );
   register( ["postBuild"], "init", _buildRequireConfig );
 
