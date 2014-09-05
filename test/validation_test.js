@@ -2,7 +2,6 @@ var exec  = require('child_process').exec
   , utils = require( './util' )
   , path  = require( 'path' );
 
-
 describe('Will NOT error out on start up', function() {
   this.timeout(15000);
 

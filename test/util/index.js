@@ -9,13 +9,15 @@ exports.setupProjectData = function( projectName ) {
   var mimosaConfig = path.join( projectDirectory, "mimosa-config.js" );
   var publicDirectory = path.join( projectDirectory, "public" );
   var javascriptDirectory = path.join( publicDirectory, "javascripts" );
+  var dotEmberTest = path.join( projectDirectory, ".mimosa", "emberTest" );
 
   return {
     projectName: projectName,
     projectDir: projectDirectory,
     publicDir: publicDirectory,
     javascriptDir: javascriptDirectory,
-    mimosaConfig: mimosaConfig
+    mimosaConfig: mimosaConfig,
+    dotEmberTest:dotEmberTest
   };
 };
 
