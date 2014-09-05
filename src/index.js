@@ -5,17 +5,13 @@ var path = require( "path" )
 
   , wrench = require( "wrench" )
   , _ = require( "lodash" )
-  , testemSimple = require( "mimosa-testem-simple" )
 
   , config = require( "./config" )
   , staticAssets = require( "./tasks/static-assets" )
   , writeTestem = require( "./tasks/testem-config" )
 
   , specFiles = []
-  , requireConfig = {}
-  , mimosaRequire = null
-  , lastOutputString = null
-  , logger = null;
+  , lastOutputString = null;
 
 var _ensureDirectory = function( mimosaConfig, options, next ) {
   var folder = mimosaConfig.emberTest.assetFolderFull;
@@ -29,7 +25,8 @@ var _ensureDirectory = function( mimosaConfig, options, next ) {
 
 var _buildRequireConfig = function( mimosaConfig, options, next ) {
 
-  requireConfig = mimosaConfig.emberTest.requireConfig || mimosaRequire.requireConfig();
+  var requireConfig = mimosaConfig.emberTest.requireConfig ||
+    mimosaConfig.installedModules.mimosaRequire.requireConfig();
 
   if( !requireConfig.baseUrl ) {
     requireConfig.baseUrl = "/js";
@@ -90,8 +87,6 @@ var _removeSpec = function( mimosaConfig, options, next ) {
 };
 
 var registration = function( mimosaConfig, register ) {
-
-  logger = mimosaConfig.log;
   var e = mimosaConfig.extensions;
 
   register( ["postBuild"], "init", _ensureDirectory );
@@ -115,6 +110,7 @@ var registration = function( mimosaConfig, register ) {
   if (
       ( mimosaConfig.emberTest.executeDuringBuild && mimosaConfig.isBuild ) ||
       ( mimosaConfig.emberTest.executeDuringWatch && mimosaConfig.isWatch ) ) {
+    testemSimple = require( "mimosa-testem-simple" )
     testemSimple.registration( mimosaConfig, register );
   }
   */

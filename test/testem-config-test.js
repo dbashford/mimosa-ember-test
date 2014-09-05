@@ -62,7 +62,7 @@ describe("When starting up a two app application", function() {
   });
 
   after(function() {
-    // utils.cleanProject( env );
+    utils.cleanProject( env );
   });
 
   it( 'the testem configs will be written to the correct folder', function() {
