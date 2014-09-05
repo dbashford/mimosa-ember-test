@@ -35,7 +35,7 @@ exports.writeStaticAssets = function( mimosaConfig, options, next ) {
     if ( statInFile.isDirectory() ) {
       wrench.readdirSyncRecursive( asset ).forEach( function( f ) {
         var fullPath = path.join( asset, f );
-        var out = path.join( tr.assetFolderFull, path.basename ( asset ), path.basename( fullPath ) );
+        var out = path.join( tr.assetFolderFull, path.basename( asset ), path.basename( fullPath ) );
         filesToCheck.push( {in:fullPath, out:out, stat:fs.statSync( fullPath )} );
       });
     } else {
