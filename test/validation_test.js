@@ -15,6 +15,7 @@ describe('Will NOT error out on start up', function() {
     var cwd = process.cwd();
     process.chdir( env.projectDir );
     exec( "mimosa build", function ( err, sout, serr ) {
+      console.log(sout)
       standardErr = serr;
       done();
       process.chdir(cwd);

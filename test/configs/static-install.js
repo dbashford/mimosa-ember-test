@@ -1,6 +1,6 @@
 exports.config = {
   modules: [
-    'ember-test'
+    'ember-test', 'require'
   ],
   emberTest:{
     bowerTestAssets: false

@@ -125,18 +125,8 @@ var _writeTestemConfig = function( mimosaConfig, options, next ) {
 
 var registration = function( mimosaConfig, register ) {
 
-  /*
   logger = mimosaConfig.log;
   var e = mimosaConfig.extensions;
-
-  if( !mimosaConfig.emberTest.requireConfig ) {
-    mimosaRequire = mimosaConfig.installedModules["mimosa-require"];
-    if ( !mimosaRequire ) {
-      return logger.error( "mimosa-ember-test is configured but cannot be used unless mimosa-require is installed and used." );
-    }
-  }
-
-  */
 
   register( ["postBuild"], "init", _ensureDirectory );
 

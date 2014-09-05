@@ -1,6 +1,7 @@
 exports.config = {
   modules: [
-    'ember-test'
+    'ember-test',
+    "require"
   ],
   logger: {
     growl: {

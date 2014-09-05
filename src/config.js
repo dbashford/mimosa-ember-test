@@ -73,6 +73,27 @@ exports.placeholder = function() {
   return ph;
 };
 
+var _determineIfRequireModuleNeeded = function( config, errors ) {
+  var hasRequire = config.modules.some( function( mod ) {
+    return mod === "require" || mod === "mimosa-require";
+  });
+
+  // nothing to check
+  if ( hasRequire ) {
+    return;
+  }
+
+  var hasAppWithNoRequire = config.emberTest.apps.some( function( app ) {
+    return !app.requireConfig;
+  });
+
+  if ( hasAppWithNoRequire ) {
+    var msg = "mimosa-ember-test is configured but cannot be used unless mimosa-require" +
+      " is installed or each emberTest.app has a requireConfig specified.";
+    errors.push( msg );
+  }
+};
+
 exports.validate = function( config, validators ) {
 
   var errors = [];
@@ -173,6 +194,7 @@ exports.validate = function( config, validators ) {
 
   if ( errors.length === 0 ) {
     bower.handleBower( config, errors );
+    _determineIfRequireModuleNeeded( config, errors );
   }
 
   return errors;
