@@ -24,7 +24,7 @@ describe("When using module-stored static assets", function() {
   });
 
   after(function() {
-    // utils.cleanProject( env );
+    utils.cleanProject( env );
   });
 
   it( 'will install all the appropriate files', function() {
@@ -38,7 +38,7 @@ describe("When using module-stored static assets", function() {
       path.join("ember-qunit", "test.js")].forEach( function( p ) {
         var assetPath = path.join ( et, p );
         expect(fs.existsSync( assetPath) ).to.be.true;
-      })
+      });
   });
 
 });

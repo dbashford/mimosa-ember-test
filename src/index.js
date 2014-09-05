@@ -140,7 +140,7 @@ var registration = function( mimosaConfig, register ) {
 
   register( ["postBuild"], "init", _ensureDirectory );
 
-  if ( mimosaConfig.emberTest.bowerTestAssets ) {
+  if ( !mimosaConfig.emberTest.bowerTestAssets ) {
     register( ["postBuild"], "init", staticAssets.writeStaticAssets );
   }
 
