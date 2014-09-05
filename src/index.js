@@ -9,12 +9,12 @@ var path = require( "path" )
 
   , config = require( "./config" )
   , staticAssets = require( "./tasks/static-assets" )
+  , writeTestem = require( "./tasks/testem-config" )
 
   , specFiles = []
   , requireConfig = {}
   , mimosaRequire = null
   , lastOutputString = null
-  , testVariablesPath = null
   , logger = null;
 
 var _ensureDirectory = function( mimosaConfig, options, next ) {
@@ -51,6 +51,7 @@ var _buildRequireConfig = function( mimosaConfig, options, next ) {
 
   if ( !lastOutputString || lastOutputString !== outputString ) {
     lastOutputString = outputString;
+    var testVariablesPath = path.join( mimosaConfig.emberTest.assetFolderFull, "test-variables.js" );
     fs.writeFileSync( testVariablesPath, outputString );
   }
 
@@ -88,41 +89,6 @@ var _removeSpec = function( mimosaConfig, options, next ) {
   next();
 };
 
-
-
-var __craftTestemConfig = function ( mimosaConfig, currentTestemConfig ) {
-  /*eslint camelcase:0 */
-  currentTestemConfig.test_page = mimosaConfig.emberTest.assetFolder + "/runner.html";
-  if ( !currentTestemConfig.routes ) {
-    currentTestemConfig.routes = {};
-  }
-  var jsDir = path.relative( mimosaConfig.root, mimosaConfig.watch.compiledJavascriptDir );
-  currentTestemConfig.routes["/js"] = jsDir.split( path.sep ).join( "/" );
-  return _.extend( currentTestemConfig, mimosaConfig.emberTest.testemConfig );
-};
-
-var _writeTestemConfig = function( mimosaConfig, options, next ) {
-  var currentTestemConfig = {};
-  if( fs.existsSync( mimosaConfig.testemSimple.configFile ) ) {
-    try {
-      currentTestemConfig = require( mimosaConfig.testemSimple.configFile );
-    } catch ( err ) {
-      logger.fatal( "Problem reading testem config, ", err );
-      throw new Error( "Problem reading testem config, ", err );
-    }
-  }
-
-  var testemConfig = __craftTestemConfig( mimosaConfig, _.clone( currentTestemConfig ) );
-  var testemConfigPretty = JSON.stringify( testemConfig, null, 2 );
-
-  if( JSON.stringify( currentTestemConfig, null, 2 ) !== testemConfigPretty ) {
-    logger.debug( "Writing testem configuration to [[ " + mimosaConfig.testemSimple.configFile + " ]]" );
-    fs.writeFileSync( mimosaConfig.testemSimple.configFile, testemConfigPretty );
-  }
-
-  next();
-};
-
 var registration = function( mimosaConfig, register ) {
 
   logger = mimosaConfig.log;
@@ -134,19 +100,17 @@ var registration = function( mimosaConfig, register ) {
     register( ["postBuild"], "init", staticAssets.writeStaticAssets );
   }
 
+  // register( ["postBuild"], "init", writeTestem.writeTestemConfig );
+
   /*
 
-  register( ["postBuild"], "init", _writeTestemConfig );
   register( ["postBuild"], "init", _buildRequireConfig );
-
-  register( ["add","update"], "afterWrite", _buildRequireConfig, e.javascript );
-  register( ["remove"], "afterWrite", _buildRequireConfig, e.javascript );
+  register( ["add","update","remove"], "afterWrite", _buildRequireConfig, e.javascript );
 
   register( ["add","update"], "afterCompile", _buildSpecs, e.javascript );
   register( ["buildFile"], "init", _buildSpecs, e.javascript );
-  register( ["remove"], "afterDelete", _removeSpec, e.javascript );
 
-  testVariablesPath = path.join( mimosaConfig.emberTest.assetFolderFull, "test-variables.js" );
+  register( ["remove"], "afterDelete", _removeSpec, e.javascript );
 
   if (
       ( mimosaConfig.emberTest.executeDuringBuild && mimosaConfig.isBuild ) ||
