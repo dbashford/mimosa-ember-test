@@ -2,6 +2,7 @@
 
 var fs = require( "fs" )
   , path = require( "path" )
+  , wrench = require( "wrench" )
   , allAssets = [
     "qunit.css",
     "require.min.js",
@@ -22,17 +23,31 @@ exports.writeStaticAssets = function( mimosaConfig, options, next ) {
   allAssets.filter( function ( asset ) {
     return tr.safeAssets.indexOf( path.basename( asset ) ) === -1;
   }).forEach( function( asset ) {
+    var filesToCheck = [];
+
     var fileName = path.basename( asset );
     var outFile = path.join( tr.assetFolderFull, fileName );
-    if( fs.existsSync( outFile ) ) {
-      var statInFile = fs.statSync( asset );
-      var statOutFile = fs.statSync( outFile );
-      if ( statInFile.mtime > statOutFile.mtime ) {
-        _writeFile( asset, outFile );
-      }
+    var statInFile = fs.statSync( asset );
+    if ( statInFile.isDirectory() ) {
+      wrench.readdirSyncRecursive( asset ).forEach( function( f ) {
+        var fullPath = path.join( asset, f );
+        var out = path.join( tr.assetFolderFull, path.basename( fullPath ) );
+        filesToCheck.push( {in:fullPath, out:out, stat:fs.statSync( fullPath )} );
+      });
     } else {
-      _writeFile( asset, outFile );
+      filesToCheck.push( {in:asset, out:outFile, stat:statInFile} );
     }
+
+    filesToCheck.forEach( function( file ) {
+      if ( fs.existsSync( outFile ) ) {
+        var statOutFile = fs.statSync( outFile );
+        if ( file.stat.mtime > statOutFile.mtime ) {
+          _writeFile( file.in, file.out );
+        }
+      } else {
+        _writeFile( file.in, file.out );
+      }
+    });
   });
 
   next();

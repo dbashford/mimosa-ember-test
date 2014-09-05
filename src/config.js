@@ -129,7 +129,7 @@ exports.validate = function( config, validators ) {
             if ( validators.ifExistsIsString( errors, "emberTest.apps.testLocation", app.testLocation ) ) {
               app.testLocationFull = path.join( config.watch.sourceDir, config.watch.javascriptDir, app.testLocation );
               if ( !fs.existsSync( app.testLocationFull ) ) {
-                errors.push( "emberTest.apps.testLocation does not exist, resolved to [[ " + app.testLocationFull + " ]]." );
+                errors.push( "emberTest.apps.testLocation does not exist, resolved to " + app.testLocationFull + "." );
               } else {
                 testLocationGood = true;
               }
@@ -143,7 +143,7 @@ exports.validate = function( config, validators ) {
               if ( testLocationGood ) {
                 app.testAppFactoryFull = path.join( app.testLocationFull, app.testAppFactory + ".js" );
                 if ( !fs.existsSync( app.testAppFactoryFull ) ) {
-                  errors.push( "emberTest.apps.testAppFactory does not exist, resolved to [[ " + app.testAppFactoryFull + " ]].");
+                  errors.push( "emberTest.apps.testAppFactory does not exist, resolved to " + app.testAppFactoryFull + ".");
                 }
               }
             }

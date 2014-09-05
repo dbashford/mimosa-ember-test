@@ -83,7 +83,7 @@ var expected2 =
 test("bad-config2", "when its all so so bad, 2", expected2);
 
 var expected3 =
-  " * emberTest.apps must contain at least one entry\n" +
+  " * emberTest.apps must contain at least one entry.\n" +
   " * emberTest.executeDuringBuild must be a boolean.\n" +
   " * emberTest.executeDuringWatch must be a boolean.\n" +
   " * emberTest.assetFolder must be a string.\n" +
@@ -99,7 +99,7 @@ var expected4 =
 test("bad-config4", "when no app data is provided, 4", expected4);
 
 var expected5 =
-  " * emberTest.apps.requireConfig must be a function or an object\n" +
+  " * emberTest.apps.requireConfig must be a function or an object.\n" +
   " * emberTest.apps.testLocation must be a string.\n" +
   " * emberTest.apps.testAppFactory must be a string.\n" +
   " * emberTest.apps.stylesheetPaths must be an array. \n";
@@ -111,12 +111,12 @@ var expected6 =
 test("bad-config6", "when all app data is null, 6", expected6);
 
 var expected7 =
-  " * emberTest.apps.testLocation does not exist, resolved to " + path.join(__dirname, 'bad-config7/assets/javascripts/foo') + "\n" +
+  " * emberTest.apps.testLocation does not exist, resolved to " + path.join(__dirname, 'bad-config7/assets/javascripts/foo') + ".\n" +
   " * emberTest.apps.stylesheetPaths must be an array of strings. \n";
 test("bad-config7", "when paths are bad, 7", expected7);
 
 var expected8 =
-  " * emberTest.apps.testAppFactory does not exist, resolved to " + path.join(__dirname, 'bad-config8/assets/javascripts/tests/foo.js') + " \n";
+  " * emberTest.apps.testAppFactory does not exist, resolved to " + path.join(__dirname, 'bad-config8/assets/javascripts/tests/foo.js') + ". \n";
 test("bad-config8", "when paths are bad, 8", expected8);
 
 var expected9 =

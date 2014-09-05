@@ -17,6 +17,16 @@ var path = require( "path" )
   , testVariablesPath = null
   , logger = null;
 
+var _ensureDirectory = function( mimosaConfig, options, next ) {
+  var folder = mimosaConfig.emberTest.assetFolderFull;
+  if ( !fs.existsSync( folder ) ) {
+    wrench.mkdirSyncRecursive( folder, 0x1ff );
+  }
+  next();
+};
+
+
+
 var _buildRequireConfig = function( mimosaConfig, options, next ) {
 
   requireConfig = mimosaConfig.emberTest.requireConfig || mimosaRequire.requireConfig();
@@ -78,13 +88,7 @@ var _removeSpec = function( mimosaConfig, options, next ) {
   next();
 };
 
-var _ensureDirectory = function( mimosaConfig, options, next ) {
-  var folder = mimosaConfig.emberTest.assetFolderFull;
-  if ( !fs.existsSync( folder ) ) {
-    wrench.mkdirSyncRecursive( folder, 0x1ff );
-  }
-  next();
-};
+
 
 var __craftTestemConfig = function ( mimosaConfig, currentTestemConfig ) {
   /*eslint camelcase:0 */
@@ -132,11 +136,13 @@ var registration = function( mimosaConfig, register ) {
     }
   }
 
-  register( ["postBuild"], "init", _ensureDirectory );
-
   */
 
-  register( ["postBuild"], "init", staticAssets.writeStaticAssets );
+  register( ["postBuild"], "init", _ensureDirectory );
+
+  if ( mimosaConfig.emberTest.bowerTestAssets ) {
+    register( ["postBuild"], "init", staticAssets.writeStaticAssets );
+  }
 
   /*
 
