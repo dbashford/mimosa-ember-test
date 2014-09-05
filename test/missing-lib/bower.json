@@ -1,0 +1,12 @@
+{
+  "name": "MimosaEmberSkeleton",
+  "version": "0.0.1",
+  "dependencies": {
+    "requirejs": "2.1.14",
+  },
+  "devDependencies": {
+    "qunit": "1.14.0",
+    "requirejs": "2.1.14",
+    "ember-qunit":"0.1.8"
+  }
+}

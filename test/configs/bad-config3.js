@@ -1,5 +1,6 @@
 exports.config = {
   emberTest:{
+    bowerTestAssets: null,
     apps: [],
     emberAMDPath: null,
     executeDuringBuild: "true",

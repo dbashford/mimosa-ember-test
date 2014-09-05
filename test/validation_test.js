@@ -2,15 +2,16 @@ var exec  = require('child_process').exec
   , utils = require( './util' )
   , path  = require( 'path' );
 
+
 describe('Will NOT error out on start up', function() {
   this.timeout(15000);
 
-  var env = utils.setupProjectData( "defaults")
+  var env = utils.setupProjectData( "defaults" );
   var standardErr;
 
   before(function(done){
     utils.cleanProject( env );
-    utils.setupProject( env, "defaults" );
+    utils.setupProject( env, "withbower" );
 
     var cwd = process.cwd();
     process.chdir( env.projectDir );
@@ -32,7 +33,10 @@ describe('Will NOT error out on start up', function() {
   });
 });
 
-var test = function( config, itDesc, expected ) {
+var test = function( config, itDesc, expected, project ) {
+
+  if ( !project ){ project = "defaults"; }
+
   describe('Will error out on start up', function() {
     this.timeout(15000);
 
@@ -41,7 +45,7 @@ var test = function( config, itDesc, expected ) {
 
     before(function(done){
       utils.cleanProject( env );
-      utils.setupProject( env, "defaults" );
+      utils.setupProject( env, project );
 
       var cwd = process.cwd();
       process.chdir( env.projectDir );
@@ -75,7 +79,8 @@ var expected2 =
   " * emberTest.testemConfig must be an object.\n" +
   " * emberTest.safeAssets must be an array.\n" +
   " * emberTest.emberAMDPath must be a string.\n" +
-  " * emberTest.specConvention must be a RegExp. \n";
+  " * emberTest.specConvention must be a RegExp.\n" +
+  " * emberTest.bowerTestAssets must be a boolean. \n";
 test("bad-config2", "when its all so so bad, 2", expected2);
 
 var expected3 =
@@ -85,7 +90,8 @@ var expected3 =
   " * emberTest.assetFolder must be a string.\n" +
   " * emberTest.safeAssets must be an array of strings.\n" +
   " * emberTest.emberAMDPath must be a string.\n" +
-  " * emberTest.specConvention must be a RegExp. \n";
+  " * emberTest.specConvention must be a RegExp.\n" +
+  " * emberTest.bowerTestAssets must be a boolean. \n";
 test("bad-config3", "when its all so so bad, 3", expected3);
 
 var expected4 =
@@ -118,3 +124,21 @@ var expected9 =
   " * emberTest.apps.testLocation must be provided.\n" +
   " * emberTest.apps.testAppFactory must be provided. \n";
 test("bad-config9", "when a 2nd app isn't configured right, 9", expected9);
+
+var expectedNoBower =
+  " * emberTest.bowerTestAssets is set to true, but you do not have the mimosa-bower module configured. \n";
+test("no-bower", "when bower is configured in emberTest but not configured for project", expectedNoBower);
+
+var expectedNoBowerJSON =
+  " * emberTest.bowerTestAssets is set to true, but bower.json cannot be found at \u001b[36mbower.json\u001b[0m \n";
+test("with-bower", "when bower is configured in emberTest bower.json can't be found", expectedNoBowerJSON);
+
+var expectedBadBowerJSON =
+  " * ember-test, cannot require in bower.json, is it formatted correctly? " +
+  path.join(__dirname + "/bad-bower/bower.json") + ": Unexpected token } \n";
+test("bad-bower", "when bower.json is found but not correctly formatted", expectedBadBowerJSON, "badbower");
+
+var expectedBowerMissingLib =
+  " * emberTest.bowerTestAssets is set to true, but \u001b[36msinonjs\u001b[0m is missing from your bower.json \n";
+test("bower-missing-lib", "when bower is configured in emberTest but not configured for project", expectedBowerMissingLib, "missinglib");
+

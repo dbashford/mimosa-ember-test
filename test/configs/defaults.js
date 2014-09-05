@@ -1,5 +1,6 @@
 exports.config = {
   emberTest:{
+    bowerTestAssets: true,
     apps: [{
       testLocation: "tests",
       testAppFactory: "create_test_app",
@@ -18,7 +19,8 @@ exports.config = {
     }
   },
   modules: [
-    'ember-test'
+    'ember-test',
+    'bower'
   ],
   logger: {
     growl: {

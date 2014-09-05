@@ -2,12 +2,14 @@
 
 var path = require( "path" )
   , fs = require( "fs" )
-  , testemSimple = require( "mimosa-testem-simple" );
+  , testemSimple = require( "mimosa-testem-simple" )
+  , bower = require( "./bower" );
 
 exports.defaults = function() {
   var defs = testemSimple.defaults();
 
   defs.emberTest = {
+    bowerTestAssets: true,
     apps: [{
       testLocation: "tests",
       testAppFactory: "create_test_app",
@@ -32,6 +34,8 @@ exports.defaults = function() {
 exports.placeholder = function() {
   var ph = testemSimple.placeholder().replace( "testem.json", ".mimosa/emberTest/testem.json" ) +
     "\n\n  emberTest:                  # Configuration for the ember-test module\n" +
+    "    bowerTestAssets: true         # Whether or not to use bower to bring in test assets\n" +
+    "                                  # like qunit, sinon, require.js and ember-qunit\n" +
     "    apps:[{                       # configuration for each ember app in your project\n" +
     "      testLocation: \"tests\"       # The path, relative to watch.javascriptDir where this\n" +
     "                                  # ember app's test assets live.\n" +
@@ -67,72 +71,6 @@ exports.placeholder = function() {
     "      \"launch_in_ci\": [\"PhantomJS\"]          # In CI mode uses PhantomJS (must be installed)\n";
 
   return ph;
-};
-
-var _handleBower = function( config ) {
-
-  var hasBower = config.modules.some( function( mod ) {
-    return mod.indexOf("bower") === 0 || mod.indexOf("mimosa-bower") === 0;
-  });
-
-  if ( hasBower ) {
-    var b = config.bower
-      , relativeVendorToAssets = path.relative( config.vendor.javascripts, config.emberTest.assetFolderFull );
-
-    var libraryPlacementConfig = {
-      qunit : {
-        "qunit/qunit.js": relativeVendorToAssets + "/qunit.js",
-        "qunit/qunit.css": relativeVendorToAssets + "/qunit.css"
-      },
-      requirejs: {
-        "require.js": relativeVendorToAssets + "/require.js"
-      },
-      sinonjs: {
-        "sinon.js": relativeVendorToAssets + "/sinon.js"
-      },
-      "ember-qunit": {
-        "dist/amd": relativeVendorToAssets + "/ember-qunit"
-      }
-    };
-
-    // unlikely
-    if ( !b.copy ) {
-      b.copy = {};
-    }
-
-    // will be inserting overrides
-    if ( !b.copy.mainOverrides ) {
-      b.copy.mainOverrides = {};
-    }
-
-    // if pathFull exists, then mimosa-bower has already done
-    // its validation (earlier in list of modules), so any
-    // validation-created objects need to be created now
-    if ( b.bowerDir.pathFull ) {
-      // will be inserting overridesObjects
-      if ( !b.copy.overridesObjects ) {
-        b.copy.overridesObjects = {};
-      }
-    }
-
-    Object.keys( libraryPlacementConfig ).forEach( function( lib ) {
-      // don't overwrite if its already there
-      if ( !b.copy.mainOverrides[lib] ) {
-        b.copy.mainOverrides[lib] = [ libraryPlacementConfig[lib] ];
-        if ( b.bowerDir.pathFull ) {
-          b.copy.overridesObjects[lib] = libraryPlacementConfig[lib];
-        }
-      }
-    });
-
-    // need to exclude ember-data
-    if (!b.copy.exclude) {
-      b.copy.exclude = [];
-    }
-    var pathToEmberData = path.join( config.root, b.bowerDir.path, "ember-data", "ember-data.js" );
-    b.copy.exclude.push( pathToEmberData );
-
-  }
 };
 
 exports.validate = function( config, validators ) {
@@ -173,14 +111,14 @@ exports.validate = function( config, validators ) {
 
     if ( validators.ifExistsIsArrayOfObjects( errors, "emberTest.apps", et.apps ) ) {
       if ( !et.apps.length ) {
-        errors.push( "emberTest.apps must contain at least one entry" );
+        errors.push( "emberTest.apps must contain at least one entry." );
       } else {
         et.apps.forEach( function( app ) {
 
           if ( app.requireConfig ) {
             var o = app.requireConfig;
             if ( typeof o !== "function" && (typeof o !== "object" || Array.isArray( o ) ) ) {
-              errors.push( "emberTest.apps.requireConfig must be a function or an object" );
+              errors.push( "emberTest.apps.requireConfig must be a function or an object." );
             }
           }
 
@@ -191,7 +129,7 @@ exports.validate = function( config, validators ) {
             if ( validators.ifExistsIsString( errors, "emberTest.apps.testLocation", app.testLocation ) ) {
               app.testLocationFull = path.join( config.watch.sourceDir, config.watch.javascriptDir, app.testLocation );
               if ( !fs.existsSync( app.testLocationFull ) ) {
-                errors.push( "emberTest.apps.testLocation does not exist, resolved to " + app.testLocationFull );
+                errors.push( "emberTest.apps.testLocation does not exist, resolved to [[ " + app.testLocationFull + " ]]." );
               } else {
                 testLocationGood = true;
               }
@@ -205,7 +143,7 @@ exports.validate = function( config, validators ) {
               if ( testLocationGood ) {
                 app.testAppFactoryFull = path.join( app.testLocationFull, app.testAppFactory + ".js" );
                 if ( !fs.existsSync( app.testAppFactoryFull ) ) {
-                  errors.push( "emberTest.apps.testAppFactory does not exist, resolved to " + app.testAppFactoryFull );
+                  errors.push( "emberTest.apps.testAppFactory does not exist, resolved to [[ " + app.testAppFactoryFull + " ]].");
                 }
               }
             }
@@ -229,10 +167,12 @@ exports.validate = function( config, validators ) {
     if ( et.assetFolderFull ) {
       config.testemSimple.configFile = path.join( et.assetFolderFull, "testem.json" );
     }
+
+    validators.isBoolean( errors, "emberTest.bowerTestAssets", et.bowerTestAssets );
   }
 
   if ( errors.length === 0 ) {
-    _handleBower( config );
+    bower.handleBower( config, errors );
   }
 
   return errors;

@@ -156,6 +156,8 @@ var _writeTestemConfig = function( mimosaConfig, options, next ) {
 };
 
 var registration = function( mimosaConfig, register ) {
+
+  /*
   logger = mimosaConfig.log;
   var e = mimosaConfig.extensions;
 
@@ -185,6 +187,7 @@ var registration = function( mimosaConfig, register ) {
       ( mimosaConfig.emberTest.executeDuringWatch && mimosaConfig.isWatch ) ) {
     testemSimple.registration( mimosaConfig, register );
   }
+  */
 };
 
 module.exports = {
