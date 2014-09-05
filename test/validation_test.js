@@ -142,3 +142,12 @@ var expectedBowerMissingLib =
   " * emberTest.bowerTestAssets is set to true, but \u001b[36msinonjs\u001b[0m is missing from your bower.json \n";
 test("bower-missing-lib", "when bower is configured in emberTest but not configured for project", expectedBowerMissingLib, "missinglib");
 
+var noRequireConfigured =
+  " * mimosa-ember-test is configured but cannot be used unless mimosa-require is installed or each emberTest.app has a requireConfig specified. \n";
+test("but-no-require", "when require is configured and no requireConfigs specified", noRequireConfigured);
+
+// should only be bower error
+var noRequireWithAppConfig =
+  " * emberTest.bowerTestAssets is set to true, but you do not have the mimosa-bower module configured. \n";
+test("no-require-with-app-config", "when require is not configured and requireConfigs are specified (with only a bower error)", noRequireWithAppConfig);
+
