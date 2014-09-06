@@ -9,6 +9,7 @@ var path = require( "path" )
   , config = require( "./config" )
   , staticAssets = require( "./tasks/static-assets" )
   , writeTestem = require( "./tasks/testem-config" )
+  , specs = require( "./tasks/manage-specs" )
 
   , specFiles = []
   , lastOutputString = null;
@@ -21,9 +22,7 @@ var _ensureDirectory = function( mimosaConfig, options, next ) {
   next();
 };
 
-
-
-var _buildRequireConfig = function( mimosaConfig, options, next ) {
+var _buildTestVariables = function( mimosaConfig, options, next ) {
 
   var requireConfig = mimosaConfig.emberTest.requireConfig ||
     mimosaConfig.installedModules.mimosaRequire.requireConfig();
@@ -55,57 +54,23 @@ var _buildRequireConfig = function( mimosaConfig, options, next ) {
   next();
 };
 
-var __specs = function( mimosaConfig, options, manipulateSpecs ) {
-  options.files.forEach( function( file ) {
-    if ( mimosaConfig.emberTest.specConvention.test( file.outputFileName ) ) {
-      var specPath = file.outputFileName.replace( mimosaConfig.watch.compiledJavascriptDir + path.sep, "" );
-      specPath = specPath.replace( path.extname( specPath ), "" );
-      specPath = specPath.split( path.sep ).join( "/" );
-      manipulateSpecs( specPath );
-    }
-  });
-};
-
-var _buildSpecs = function( mimosaConfig, options, next ) {
-  __specs( mimosaConfig, options, function( specPath ) {
-    if( specFiles.indexOf( specPath ) === -1 ) {
-      specFiles.push( specPath );
-    }
-  });
-
-  next();
-};
-
-var _removeSpec = function( mimosaConfig, options, next ) {
-  __specs( mimosaConfig, options, function( specPath ) {
-    var specFileLoc = specFiles.indexOf( specPath );
-    if( specFileLoc > -1 ) {
-      specFiles.splice( specFileLoc, 1 );
-    }
-  });
-  next();
-};
-
 var registration = function( mimosaConfig, register ) {
   var e = mimosaConfig.extensions;
 
   register( ["postBuild"], "init", _ensureDirectory );
-
   if ( !mimosaConfig.emberTest.bowerTestAssets ) {
     register( ["postBuild"], "init", staticAssets.writeStaticAssets );
   }
-
   register( ["postBuild"], "init", writeTestem.writeTestemConfig );
+
+  // register( ["add","update"], "afterCompile", specs.buildSpecs, e.javascript );
+  // register( ["buildFile"], "init", specs.buildSpecs, e.javascript );
+  // register( ["remove"], "afterDelete", specs.removeSpec, e.javascript );
 
   /*
 
-  register( ["postBuild"], "init", _buildRequireConfig );
-  register( ["add","update","remove"], "afterWrite", _buildRequireConfig, e.javascript );
-
-  register( ["add","update"], "afterCompile", _buildSpecs, e.javascript );
-  register( ["buildFile"], "init", _buildSpecs, e.javascript );
-
-  register( ["remove"], "afterDelete", _removeSpec, e.javascript );
+  register( ["postBuild"], "init", _buildTestVariables );
+  register( ["add","update","remove"], "afterWrite", _buildTestVariables, e.javascript );
 
   if (
       ( mimosaConfig.emberTest.executeDuringBuild && mimosaConfig.isBuild ) ||
@@ -113,6 +78,7 @@ var registration = function( mimosaConfig, register ) {
     testemSimple = require( "mimosa-testem-simple" )
     testemSimple.registration( mimosaConfig, register );
   }
+
   */
 };
 
