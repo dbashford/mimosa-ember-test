@@ -62,6 +62,6 @@ test(
   "lib-test-bower-first",
   "When bower executes and is configured BEFORE ember-test, ember-test");
 
-//test(
-  //"lib-test-bower-last",
-  //"When bower executes and is configured AFTER ember-test, ember-test");
+test(
+  "lib-test-bower-last",
+  "When bower executes and is configured AFTER ember-test, ember-test");
