@@ -8,7 +8,7 @@ var path = require( "path" )
 
   , config = require( "./config" )
   , staticAssets = require( "./tasks/static-assets" )
-  , writeTestem = require( "./tasks/testem-config" )
+  , testemConfig = require( "./tasks/testem-config" )
   , specs = require( "./tasks/manage-specs" )
 
   , specFiles = []
@@ -55,17 +55,17 @@ var _buildTestVariables = function( mimosaConfig, options, next ) {
 };
 
 var registration = function( mimosaConfig, register ) {
-  var e = mimosaConfig.extensions;
+  var js = mimosaConfig.extensions.javascript;
 
   register( ["postBuild"], "init", _ensureDirectory );
   if ( !mimosaConfig.emberTest.bowerTestAssets ) {
     register( ["postBuild"], "init", staticAssets.writeStaticAssets );
   }
-  register( ["postBuild"], "init", writeTestem.writeTestemConfig );
+  register( ["postBuild"], "init", testemConfig.writeTestemConfig );
 
-  // register( ["add","update"], "afterCompile", specs.buildSpecs, e.javascript );
-  // register( ["buildFile"], "init", specs.buildSpecs, e.javascript );
-  // register( ["remove"], "afterDelete", specs.removeSpec, e.javascript );
+  register( ["add", "update"], "afterCompile", specs.buildSpec, js );
+  register( ["buildFile"], "init", specs.buildSpec, js );
+  register( ["remove"], "afterDelete", specs.removeSpec, js );
 
   /*
 

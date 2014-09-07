@@ -112,8 +112,11 @@ exports.handleBower = function( config, errors ) {
           return;
         }
 
-        ["qunit", "requirejs", "sinonjs", "ember-qunit"].forEach( function( bowerLib  )  {
-          if ( !bowerJSON.dependencies[bowerLib] && !bowerJSON.devDependencies[bowerLib] ) {
+        ["qunit", "requirejs", "sinonjs", "ember-qunit"].forEach( function( bowerLib ) {
+          var dependencies = bowerJSON.dependencies || {};
+          var devDependencies = bowerJSON.devDependencies || {};
+
+          if ( !dependencies[bowerLib] && !devDependencies[bowerLib] ) {
             errors.push("emberTest.bowerTestAssets is set to true, but [[ " + bowerLib +
               " ]] is missing from your bower.json" );
           }
