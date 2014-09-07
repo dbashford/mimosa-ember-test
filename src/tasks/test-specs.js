@@ -50,6 +50,6 @@ exports.removeSpec = function( mimosaConfig, options, next ) {
   next();
 };
 
-exports.getSpecFiles = function( testLocation ) {
-  return specFiles[testLocation];
+exports.specFiles = function( testLocation ) {
+  return specFiles[testLocation] || [];
 };

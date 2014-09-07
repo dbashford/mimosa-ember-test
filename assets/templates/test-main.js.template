@@ -1,0 +1,18 @@
+QUnit.config.autostart = false;
+
+require.config(Mimosa.EmberTest.requireConfig);
+
+require(['<%= emberPath %>'], function(Ember) {
+  require({ 'baseUrl': '/ember-test' }, ['ember-qunit/main'], function(EmberQUnit) {
+    EmberQUnit.globalize();
+
+    require({ 'baseUrl': '/js' }, ['<%= testApp %>', '../testem'], function(testApp) {
+      testApp = testApp['default'] || testApp;
+      setResolver(Ember.DefaultResolver.create({ namespace: testApp() }));
+
+      require(Mimosa.EmberTest.specFiles, function() {
+        QUnit.start();
+      });
+    });
+  });
+});

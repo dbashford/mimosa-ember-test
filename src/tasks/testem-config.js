@@ -11,7 +11,7 @@ var _craftBaseTestemConfig = function ( mimosaConfig, currentTestemConfig ) {
   }
   var jsDir = path.relative( mimosaConfig.root, mimosaConfig.watch.compiledJavascriptDir );
   currentTestemConfig.routes["/js"] = jsDir.split( path.sep ).join( "/" );
-  currentTestemConfig.routes["/js2"] = mimosaConfig.emberTest.assetFolder;
+  currentTestemConfig.routes["/ember-test"] = mimosaConfig.emberTest.assetFolder;
 
   // merge in testemConfig from mimosaConfig settings
   currentTestemConfig = _.extend( currentTestemConfig, mimosaConfig.emberTest.testemConfig );
@@ -43,14 +43,16 @@ exports.writeTestemConfig = function( mimosaConfig, options, next ) {
     }
 
     // add test runner page
-    /*eslint camelcase:0 */
+    /* eslint camelcase:0 */
+    var testRunner = path.join( mimosaConfig.emberTest.assetFolder, app.testLocation, "runner.html" );
+
     var testemConfig = _.extend(
       baseTestemConfig,
-      { test_page: mimosaConfig.emberTest.assetFolder + "/runner" + i + ".html" } );
+      { test_page: testRunner } );
 
     var testemConfigPretty = JSON.stringify( testemConfig, null, 2 );
 
-    if( JSON.stringify( currentTestemConfig, null, 2 ) !== testemConfigPretty ) {
+    if ( JSON.stringify( currentTestemConfig, null, 2 ) !== testemConfigPretty ) {
       mimosaConfig.log.debug( "Writing testem configuration to [[ " + mimosaConfig.testemSimple.configFile + " ]]" );
       var fileName = mimosaConfig.testemSimple.configFile;
       if ( moreThanOne ) {

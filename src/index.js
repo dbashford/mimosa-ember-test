@@ -9,47 +9,24 @@ var path = require( "path" )
   , config = require( "./config" )
   , staticAssets = require( "./tasks/static-assets" )
   , testemConfig = require( "./tasks/testem-config" )
-  , specs = require( "./tasks/manage-specs" )
+  , testEnv = require( "./tasks/test-env" )
+  , testSpecs = require( "./tasks/test-specs" );
 
-  , specFiles = []
-  , lastOutputString = null;
+var _ensureDirectories = function( mimosaConfig, options, next ) {
+  var assetFolder = mimosaConfig.emberTest.assetFolderFull;
 
-var _ensureDirectory = function( mimosaConfig, options, next ) {
-  var folder = mimosaConfig.emberTest.assetFolderFull;
-  if ( !fs.existsSync( folder ) ) {
-    wrench.mkdirSyncRecursive( folder, 0x1ff );
-  }
-  next();
-};
+  var dirs = [].concat( assetFolder,
+    _.pluck( mimosaConfig.emberTest.apps, "testLocation" )
+    .map( function( testLocation ) {
+      return path.join( assetFolder, testLocation );
+    })
+  );
 
-var _buildTestVariables = function( mimosaConfig, options, next ) {
-
-  var requireConfig = mimosaConfig.emberTest.requireConfig ||
-    mimosaConfig.installedModules.mimosaRequire.requireConfig();
-
-  if( !requireConfig.baseUrl ) {
-    requireConfig.baseUrl = "/js";
-  }
-
-  // sort require config
-  var newRequireConfig = {};
-  _.sortBy( Object.keys( requireConfig ), function( k ) {
-    return -(k.length);
-  }).forEach( function( k ) {
-    newRequireConfig[k] = requireConfig[k];
+  dirs.forEach( function( dir ) {
+    if ( !fs.existsSync( dir ) ) {
+      wrench.mkdirSyncRecursive( dir, 0x1ff );
+    }
   });
-
-  var requireConfigString = JSON.stringify( newRequireConfig, null, 2 );
-  var specFilesString = JSON.stringify( specFiles.sort(), null, 2 );
-  var outputString =
-    "window.MIMOSA_TEST_REQUIRE_CONFIG = " + requireConfigString + "\n" +
-    "window.MIMOSA_TEST_SPECS = " + specFilesString + "\n";
-
-  if ( !lastOutputString || lastOutputString !== outputString ) {
-    lastOutputString = outputString;
-    var testVariablesPath = path.join( mimosaConfig.emberTest.assetFolderFull, "test-variables.js" );
-    fs.writeFileSync( testVariablesPath, outputString );
-  }
 
   next();
 };
@@ -57,29 +34,26 @@ var _buildTestVariables = function( mimosaConfig, options, next ) {
 var registration = function( mimosaConfig, register ) {
   var js = mimosaConfig.extensions.javascript;
 
-  register( ["postBuild"], "init", _ensureDirectory );
+  register( ["postBuild"], "init", _ensureDirectories );
   if ( !mimosaConfig.emberTest.bowerTestAssets ) {
     register( ["postBuild"], "init", staticAssets.writeStaticAssets );
   }
   register( ["postBuild"], "init", testemConfig.writeTestemConfig );
+  register( ["postBuild"], "init", testEnv.buildTestRunner );
+  register( ["postBuild"], "init", testEnv.buildTestVariables );
 
-  register( ["add", "update"], "afterCompile", specs.buildSpec, js );
-  register( ["buildFile"], "init", specs.buildSpec, js );
-  register( ["remove"], "afterDelete", specs.removeSpec, js );
+  register( ["add", "update"], "afterCompile", testSpecs.buildSpec, js );
+  register( ["buildFile"], "init", testSpecs.buildSpec, js );
+  register( ["remove"], "afterDelete", testSpecs.removeSpec, js );
 
-  /*
+  register( ["add","update","remove"], "afterWrite", testEnv.buildTestVariables, js );
 
-  register( ["postBuild"], "init", _buildTestVariables );
-  register( ["add","update","remove"], "afterWrite", _buildTestVariables, e.javascript );
-
-  if (
-      ( mimosaConfig.emberTest.executeDuringBuild && mimosaConfig.isBuild ) ||
-      ( mimosaConfig.emberTest.executeDuringWatch && mimosaConfig.isWatch ) ) {
-    testemSimple = require( "mimosa-testem-simple" )
-    testemSimple.registration( mimosaConfig, register );
-  }
-
-  */
+  //if (
+      //( mimosaConfig.emberTest.executeDuringBuild && mimosaConfig.isBuild ) ||
+      //( mimosaConfig.emberTest.executeDuringWatch && mimosaConfig.isWatch ) ) {
+    //testemSimple = require( "mimosa-testem-simple" )
+    //testemSimple.registration( mimosaConfig, register );
+  //}
 };
 
 module.exports = {
