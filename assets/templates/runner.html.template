@@ -7,7 +7,7 @@
 <% for (var i = 0; i < stylesheetPaths.length; i++) { %>
     <link rel="stylesheet" href="<%= stylesheetPaths[i] %>">
 <% } %>
-    <link rel="stylesheet" href="/ember-test/qunit.css">
+    <link rel="stylesheet" href="/ember-test/vendor/qunit.css">
 
     <style>
       #ember-testing-container {
@@ -27,9 +27,9 @@
       }
     </style>
 
-    <script src="/ember-test/qunit.js"></script>
-    <script src="/ember-test/sinon.js"></script>
-    <script src="/ember-test/require.js"></script>
+    <script src="/ember-test/vendor/qunit.js"></script>
+    <script src="/ember-test/vendor/sinon.js"></script>
+    <script src="/ember-test/vendor/require.js"></script>
     <script src="test-variables.js"></script>
     <script src="test-main.js"></script>
   </head>

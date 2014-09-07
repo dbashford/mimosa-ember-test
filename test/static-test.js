@@ -35,9 +35,10 @@ describe("When using module-stored static assets", function() {
       "sinon.js",
       "ember-qunit",
       path.join("ember-qunit", "main.js"),
-      path.join("ember-qunit", "test.js")].forEach( function( p ) {
-        var assetPath = path.join ( et, p );
-        expect(fs.existsSync( assetPath) ).to.be.true;
+      path.join("ember-qunit", "test.js")
+    ].forEach( function( p ) {
+        var assetPath = path.join( et, "vendor", p );
+        expect(fs.existsSync( assetPath ) ).to.be.true;
       });
   });
 

@@ -6,21 +6,22 @@ var path = require( "path" )
 
 var _updateBowerConfig = function ( config ) {
   var b = config.bower
-    , relativeVendorToAssets = path.relative( config.vendor.javascripts, config.emberTest.assetFolderFull );
+    , relativeVendorToAssets = path.relative( config.vendor.javascripts, config.emberTest.assetFolderFull )
+    , assetFolder = relativeVendorToAssets + "/vendor";
 
   var libraryPlacementConfig = {
     qunit : {
-      "qunit/qunit.js": relativeVendorToAssets + "/qunit.js",
-      "qunit/qunit.css": relativeVendorToAssets + "/qunit.css"
+      "qunit/qunit.js": assetFolder + "/qunit.js",
+      "qunit/qunit.css": assetFolder + "/qunit.css"
     },
     requirejs: {
-      "require.js": relativeVendorToAssets + "/require.js"
+      "require.js": assetFolder + "/require.js"
     },
     sinonjs: {
-      "sinon.js": relativeVendorToAssets + "/sinon.js"
+      "sinon.js": assetFolder + "/sinon.js"
     },
     "ember-qunit": {
-      "dist/amd": relativeVendorToAssets + "/ember-qunit"
+      "dist/amd": assetFolder + "/ember-qunit"
     }
   };
 

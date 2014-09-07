@@ -37,10 +37,11 @@ var test = function( config, desc ) {
         "sinon.js",
         "ember-qunit",
         path.join("ember-qunit", "main.js"),
-        path.join("ember-qunit", "test.js")].forEach( function( p ) {
-          var assetPath = path.join ( et, p );
-          expect(fs.existsSync( assetPath) ).to.be.true;
-        })
+        path.join("ember-qunit", "test.js")
+      ].forEach( function( p ) {
+        var assetPath = path.join( et, "vendor", p );
+        expect(fs.existsSync( assetPath ) ).to.be.true;
+      });
     });
 
     it( 'will install require.js in source', function(){
@@ -61,6 +62,6 @@ test(
   "lib-test-bower-first",
   "When bower executes and is configured BEFORE ember-test, ember-test");
 
-test(
-  "lib-test-bower-last",
-  "When bower executes and is configured AFTER ember-test, ember-test");
+//test(
+  //"lib-test-bower-last",
+  //"When bower executes and is configured AFTER ember-test, ember-test");

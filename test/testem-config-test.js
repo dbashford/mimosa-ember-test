@@ -35,7 +35,7 @@ describe("When starting up a one app application", function() {
   it( 'the testem config contain the right information', function() {
     var assetPath = path.join ( et, "testem.json" );
     var testemJSON = JSON.parse( fs.readFileSync(assetPath, "utf8" ) );
-    expect( testemJSON.test_page ).to.eql(".mimosa/emberTest/runner.html");
+    expect( testemJSON.test_page ).to.eql(".mimosa/emberTest/tests/runner.html");
   });
 
 });
@@ -71,7 +71,6 @@ describe("When starting up a two app application", function() {
 
     expect(fs.existsSync( assetPath1 ) ).to.be.true;
     expect(fs.existsSync( assetPath2 ) ).to.be.true;
-
   });
 
   it( 'the testem config contain the right information', function() {
@@ -80,9 +79,8 @@ describe("When starting up a two app application", function() {
     var testemJSON1 = JSON.parse( fs.readFileSync(assetPath1, "utf8" ) );
     var testemJSON2 = JSON.parse( fs.readFileSync(assetPath2, "utf8" ) );
 
-    expect( testemJSON1.test_page ).to.eql(".mimosa/emberTest/runner1.html");
-    expect( testemJSON2.test_page ).to.eql(".mimosa/emberTest/runner2.html");
-
+    expect( testemJSON1.test_page ).to.eql(".mimosa/emberTest/blogger/tests/runner.html");
+    expect( testemJSON2.test_page ).to.eql(".mimosa/emberTest/admin/tests/runner.html");
   });
 
 });

@@ -3,15 +3,7 @@
 var fs = require( "fs" )
   , path = require( "path" )
   , wrench = require( "wrench" )
-  , assetsDir = path.join( __dirname, "..", "..", "assets" )
-  , allAssets = [
-    "qunit.css",
-    "require.js",
-    "qunit.js",
-    "sinon.js",
-    "ember-qunit"].map( function (asset) {
-    return path.join( assetsDir, asset );
-  });
+  , assetsDir = path.join( __dirname, "..", "..", "assets", "vendor" );
 
 var _writeFile = function( inPath, outPath ) {
   var dirname = path.dirname( outPath );
@@ -23,23 +15,26 @@ var _writeFile = function( inPath, outPath ) {
 };
 
 exports.writeStaticAssets = function( mimosaConfig, options, next ) {
-  var tr = mimosaConfig.emberTest;
+  var emberTest = mimosaConfig.emberTest;
+  var outputDir = path.join( emberTest.assetFolderFull, "vendor" );
 
-  allAssets.filter( function ( asset ) {
-    return tr.safeAssets.indexOf( path.basename( asset ) ) === -1;
-  }).forEach( function( asset ) {
+  var assets = fs.readdirSync( assetsDir ).filter( function( asset ) {
+    return emberTest.safeAssets.indexOf( asset ) === -1;
+  });
+
+  assets.forEach( function( asset ) {
+    var assetPath = path.join( assetsDir, asset );
+    var statInFile = fs.statSync( assetPath );
     var filesToCheck = [];
-    var fileName = path.basename( asset );
-    var outFile = path.join( tr.assetFolderFull, fileName );
-    var statInFile = fs.statSync( asset );
+
     if ( statInFile.isDirectory() ) {
-      wrench.readdirSyncRecursive( asset ).forEach( function( f ) {
-        var fullPath = path.join( asset, f );
-        var out = path.join( tr.assetFolderFull, path.basename( asset ), path.basename( fullPath ) );
-        filesToCheck.push( {in:fullPath, out:out, stat:fs.statSync( fullPath )} );
+      wrench.readdirSyncRecursive( assetPath ).forEach( function( filename ) {
+        var inPath = path.join( assetPath, filename );
+        var outPath = path.join( outputDir, asset, filename );
+        filesToCheck.push( { in: inPath, out: outPath, stat: fs.statSync( assetPath ) });
       });
     } else {
-      filesToCheck.push( {in:asset, out:outFile, stat:statInFile} );
+      filesToCheck.push( { in: assetPath, out: path.join( outputDir, asset ), stat: statInFile } );
     }
 
     filesToCheck.forEach( function( file ) {
