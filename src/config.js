@@ -75,6 +75,7 @@ exports.placeholder = function() {
 
 var _determineIfRequireModuleNeeded = function( config, errors ) {
   var hasRequire = config.modules.some( function( mod ) {
+    mod = mod.split("@").shift();
     return mod === "require" || mod === "mimosa-require";
   });
 
