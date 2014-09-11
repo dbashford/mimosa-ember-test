@@ -1,14 +1,13 @@
 "use strict";
 
-var path  = require( "path" );
-var fs    = require( "fs" );
-var _     = require( "lodash" );
-var specs = require( "./test-specs" );
-
-var testRunnerTemplate,
-    testMainTemplate,
-    testVariablesTemplate,
-    testVariablesLastOutput;
+var path  = require( "path" )
+  , fs    = require( "fs" )
+  , _     = require( "lodash" )
+  , specs = require( "./test-specs" )
+  , testRunnerTemplate
+  , testMainTemplate
+  , testVariablesTemplate
+  , testVariablesLastOutput;
 
 function _compileTemplate( templateName ) {
   var templatePath = path.resolve( __dirname, "../../assets/templates/" + templateName );
@@ -16,16 +15,8 @@ function _compileTemplate( templateName ) {
   return _.template( templateText );
 }
 
-function _writeFile( mimosaConfig, file, output ) {
-  fs.writeFile( file, output, function( err ) {
-    if ( err ) {
-      mimosaConfig.log.error( "ember-test: Error writing file [[ " + file + " ]]", err );
-    }
-  });
-}
-
 function _buildTestRunner( mimosaConfig, options, app ) {
-  if (!testRunnerTemplate) {
+  if ( !testRunnerTemplate ) {
     testRunnerTemplate = _compileTemplate( "runner.html.template" );
   }
 
@@ -35,11 +26,11 @@ function _buildTestRunner( mimosaConfig, options, app ) {
     stylesheetPaths: app.stylesheetPaths
   });
 
-  _writeFile( mimosaConfig, file, output );
+  fs.writeFileSync( file, output );
 }
 
 function _buildTestMain( mimosaConfig, options, app ) {
-  if (!testMainTemplate) {
+  if ( !testMainTemplate ) {
     testMainTemplate = _compileTemplate( "test-main.js.template" );
   }
 
@@ -49,7 +40,7 @@ function _buildTestMain( mimosaConfig, options, app ) {
     testApp: [ app.testLocation, app.testAppFactory ].join("/")
   });
 
-  _writeFile( mimosaConfig, file, output );
+  fs.writeFileSync( file, output );
 }
 
 exports.buildTestRunner = function( mimosaConfig, options, next ) {
@@ -64,7 +55,7 @@ exports.buildTestVariables = function( mimosaConfig, options, next ) {
   var mimosaRequire = mimosaConfig.installedModules["mimosa-require"];
   var mimosaRequireConfig = mimosaRequire.requireConfig();
 
-  if (!testVariablesTemplate) {
+  if ( !testVariablesTemplate ) {
     testVariablesTemplate = _compileTemplate( "test-variables.js.template" );
   }
 
@@ -76,7 +67,7 @@ exports.buildTestVariables = function( mimosaConfig, options, next ) {
     // sort require config
     var appRequireConfig = {};
     _.sortBy( Object.keys( requireConfig ), function( k ) {
-      return -(k.length);
+      return -( k.length );
     }).forEach( function( k ) {
       appRequireConfig[k] = requireConfig[k];
     });
@@ -86,11 +77,11 @@ exports.buildTestVariables = function( mimosaConfig, options, next ) {
       specFiles: JSON.stringify( specs.specFiles( app.testLocation ).sort(), null, 2 )
     });
 
-    if (!testVariablesLastOutput || testVariablesLastOutput !== output ) {
+    if ( !testVariablesLastOutput || testVariablesLastOutput !== output ) {
       testVariablesLastOutput = output;
 
       var file = path.join( mimosaConfig.emberTest.assetFolderFull, app.testLocation, "test-variables.js" );
-      _writeFile( mimosaConfig, file, output );
+      fs.writeFileSync( file, output );
     }
   });
 

@@ -25,19 +25,21 @@ exports.writeStaticAssets = function( mimosaConfig, options, next ) {
   assets.forEach( function( asset ) {
     var assetPath = path.join( assetsDir, asset );
     var statInFile = fs.statSync( assetPath );
-    var filesToCheck = [];
+    var filesToCopy = [];
 
+    // build list of vendor assets to to copy
     if ( statInFile.isDirectory() ) {
       wrench.readdirSyncRecursive( assetPath ).forEach( function( filename ) {
         var inPath = path.join( assetPath, filename );
         var outPath = path.join( outputDir, asset, filename );
-        filesToCheck.push( { in: inPath, out: outPath, stat: fs.statSync( assetPath ) });
+        filesToCopy.push( { in: inPath, out: outPath, stat: fs.statSync( assetPath ) });
       });
     } else {
-      filesToCheck.push( { in: assetPath, out: path.join( outputDir, asset ), stat: statInFile } );
+      filesToCopy.push( { in: assetPath, out: path.join( outputDir, asset ), stat: statInFile } );
     }
 
-    filesToCheck.forEach( function( file ) {
+    // ensure each file to copy in actually needs to be copied
+    filesToCopy.forEach( function( file ) {
       if ( fs.existsSync( file.out ) ) {
         var statOutFile = fs.statSync( file.out );
         if ( file.stat.mtime > statOutFile.mtime ) {

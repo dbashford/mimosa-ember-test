@@ -3,14 +3,14 @@
 var path = require( "path" )
   , specFiles = {};
 
-function _specPath( root, filename ) {
+var _specPath = function( root, filename ) {
   var specPath = path.relative( root, filename );
   specPath = specPath.replace( path.extname( specPath ), "" );
   specPath = specPath.split( path.sep ).join( "/" );
   return specPath;
 }
 
-function _run( mimosaConfig, options, manipulateSpec ) {
+var _run = function( mimosaConfig, options, manipulateSpec ) {
   var root = mimosaConfig.watch.compiledJavascriptDir;
   var apps = mimosaConfig.emberTest.apps;
   var specConvention = mimosaConfig.emberTest.specConvention;
