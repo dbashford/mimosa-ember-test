@@ -10,7 +10,6 @@ var test = function( config, desc ) {
 
     var env = utils.setupProjectData( config );
     var et = env.dotEmberTest;
-    var standardErr;
 
     before(function(done){
       utils.cleanProject( env );
@@ -19,7 +18,6 @@ var test = function( config, desc ) {
       var cwd = process.cwd();
       process.chdir( env.projectDir );
       exec( "mimosa build", function ( err, sout, serr ) {
-        standardErr = serr;
         done();
         process.chdir(cwd);
       });

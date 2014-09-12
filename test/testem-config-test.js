@@ -8,7 +8,6 @@ describe("When starting up a one app application", function() {
 
   var env = utils.setupProjectData( "testem-config-one-app" );
   var et = env.dotEmberTest;
-  var standardErr;
 
   before(function(done){
     utils.cleanProject( env );
@@ -17,7 +16,6 @@ describe("When starting up a one app application", function() {
     var cwd = process.cwd();
     process.chdir( env.projectDir );
     exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
       done();
       process.chdir(cwd);
     });
@@ -46,7 +44,6 @@ describe("When starting up a two app application", function() {
 
   var env = utils.setupProjectData( "testem-config-two-apps" );
   var et = env.dotEmberTest;
-  var standardErr;
 
   before(function(done){
     utils.cleanProject( env );
@@ -55,7 +52,6 @@ describe("When starting up a two app application", function() {
     var cwd = process.cwd();
     process.chdir( env.projectDir );
     exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
       done();
       process.chdir(cwd);
     });

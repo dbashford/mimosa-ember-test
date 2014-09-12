@@ -8,7 +8,6 @@ describe("When using module-stored static assets", function() {
 
   var env = utils.setupProjectData( "static-install" );
   var et = env.dotEmberTest;
-  var standardErr;
 
   before(function(done){
     utils.cleanProject( env );
@@ -17,7 +16,6 @@ describe("When using module-stored static assets", function() {
     var cwd = process.cwd();
     process.chdir( env.projectDir );
     exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
       done();
       process.chdir(cwd);
     });

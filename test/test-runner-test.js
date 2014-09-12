@@ -8,7 +8,6 @@ describe("When starting up with one app application", function() {
 
   var env = utils.setupProjectData( "one-app-test-runner" );
   var et = env.dotEmberTest;
-  var standardErr;
   var assetPath = path.join ( et, "tests", "runner.html" );
 
   before(function(done){
@@ -18,7 +17,6 @@ describe("When starting up with one app application", function() {
     var cwd = process.cwd();
     process.chdir( env.projectDir );
     exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
       done();
       process.chdir(cwd);
     });
@@ -45,7 +43,6 @@ describe("When starting up with a two apps project", function() {
 
   var env = utils.setupProjectData( "two-app-test-runner" );
   var et = env.dotEmberTest;
-  var standardErr;
   var assetPath = path.join ( et, "blogger", "tests", "runner.html" );
   var assetPath2 = path.join ( et, "admin", "tests", "runner.html" );
 
@@ -56,7 +53,6 @@ describe("When starting up with a two apps project", function() {
     var cwd = process.cwd();
     process.chdir( env.projectDir );
     exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
       done();
       process.chdir(cwd);
     });
@@ -89,7 +85,6 @@ describe("When starting up with one app application", function() {
 
   var env = utils.setupProjectData( "test-runner-stylesheet" );
   var et = env.dotEmberTest;
-  var standardErr;
   var assetPath = path.join ( et, "tests", "runner.html" );
 
   before(function(done){
@@ -99,7 +94,6 @@ describe("When starting up with one app application", function() {
     var cwd = process.cwd();
     process.chdir( env.projectDir );
     exec( "mimosa build", function ( err, sout, serr ) {
-      standardErr = serr;
       done();
       process.chdir(cwd);
     });

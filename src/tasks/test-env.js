@@ -65,6 +65,7 @@ exports.buildTestVariables = function( mimosaConfig, options, next ) {
     requireConfig.baseUrl = requireConfig.baseUrl || "/js";
 
     // sort require config
+    // trying to avoid accidentally creating a diff in the output code
     var appRequireConfig = {};
     _.sortBy( Object.keys( requireConfig ), function( k ) {
       return -( k.length );
