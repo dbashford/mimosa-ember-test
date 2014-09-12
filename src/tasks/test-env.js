@@ -9,13 +9,13 @@ var path  = require( "path" )
   , testVariablesTemplate
   , testVariablesLastOutput;
 
-function _compileTemplate( templateName ) {
+var _compileTemplate = function( templateName ) {
   var templatePath = path.resolve( __dirname, "../../assets/templates/" + templateName );
   var templateText = fs.readFileSync( templatePath );
   return _.template( templateText );
-}
+};
 
-function _buildTestRunner( mimosaConfig, options, app ) {
+var _buildTestRunner = function( mimosaConfig, options, app ) {
   if ( !testRunnerTemplate ) {
     testRunnerTemplate = _compileTemplate( "runner.html.template" );
   }
@@ -27,9 +27,9 @@ function _buildTestRunner( mimosaConfig, options, app ) {
   });
 
   fs.writeFileSync( file, output );
-}
+};
 
-function _buildTestMain( mimosaConfig, options, app ) {
+var _buildTestMain = function( mimosaConfig, options, app ) {
   if ( !testMainTemplate ) {
     testMainTemplate = _compileTemplate( "test-main.js.template" );
   }
@@ -41,7 +41,7 @@ function _buildTestMain( mimosaConfig, options, app ) {
   });
 
   fs.writeFileSync( file, output );
-}
+};
 
 exports.buildTestRunner = function( mimosaConfig, options, next ) {
   mimosaConfig.emberTest.apps.forEach( function( app ) {

@@ -8,7 +8,7 @@ var _specPath = function( root, filename ) {
   specPath = specPath.replace( path.extname( specPath ), "" );
   specPath = specPath.split( path.sep ).join( "/" );
   return specPath;
-}
+};
 
 var _run = function( mimosaConfig, options, manipulateSpec ) {
   var root = mimosaConfig.watch.compiledJavascriptDir;
@@ -25,7 +25,7 @@ var _run = function( mimosaConfig, options, manipulateSpec ) {
       });
     }
   });
-}
+};
 
 exports.buildSpec = function( mimosaConfig, options, next ) {
   _run( mimosaConfig, options, function( specPath, testLocation ) {
