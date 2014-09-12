@@ -23,7 +23,7 @@ function _buildTestRunner( mimosaConfig, options, app ) {
   var file = path.join( mimosaConfig.emberTest.assetFolderFull, app.testLocation, "runner.html" );
   var output = testRunnerTemplate({
     testLocation: app.testLocation,
-    stylesheetPaths: app.stylesheetPaths
+    stylesheetPaths: app.stylesheetPaths || []
   });
 
   fs.writeFileSync( file, output );

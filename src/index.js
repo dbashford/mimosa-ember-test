@@ -48,12 +48,12 @@ var registration = function( mimosaConfig, register ) {
 
   register( ["add","update","remove"], "afterWrite", testEnv.buildTestVariables, js );
 
-  //if (
-      //( mimosaConfig.emberTest.executeDuringBuild && mimosaConfig.isBuild ) ||
-      //( mimosaConfig.emberTest.executeDuringWatch && mimosaConfig.isWatch ) ) {
-    //testemSimple = require( "mimosa-testem-simple" )
-    //testemSimple.registration( mimosaConfig, register );
-  //}
+  // if (
+  //     ( mimosaConfig.emberTest.executeDuringBuild && mimosaConfig.isBuild ) ||
+  //     ( mimosaConfig.emberTest.executeDuringWatch && mimosaConfig.isWatch ) ) {
+  //   testemSimple = require( "mimosa-testem-simple" )
+  //   testemSimple.registration( mimosaConfig, register );
+  // }
 };
 
 module.exports = {
