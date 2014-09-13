@@ -38,6 +38,7 @@ describe("When starting up with one app application", function() {
     expect( window.Mimosa.EmberTest ).to.be.an('object');
     expect( window.Mimosa.EmberTest.specFiles ).to.be.an('array');
     expect( window.Mimosa.EmberTest.specFiles.length ).to.eql(2);
+    expect( window.Mimosa.EmberTest.specFiles[0] ).to.eql("tests/acceptance/posts_test");
     expect( window.Mimosa.EmberTest.requireConfig ).to.be.an('object');
     expect( window.Mimosa.EmberTest.requireConfig.baseUrl ).to.be.an('string');
   });
@@ -80,6 +81,7 @@ describe("When starting up with a two apps project", function() {
     expect( window.Mimosa.EmberTest ).to.be.an('object');
     expect( window.Mimosa.EmberTest.specFiles ).to.be.an('array');
     expect( window.Mimosa.EmberTest.specFiles.length ).to.eql(2);
+    expect( window.Mimosa.EmberTest.specFiles[0] ).to.eql("blogger/tests/acceptance/posts_test");
     expect( window.Mimosa.EmberTest.requireConfig ).to.be.an('object');
     expect( window.Mimosa.EmberTest.requireConfig.baseUrl ).to.be.an('string');
 
@@ -91,6 +93,7 @@ describe("When starting up with a two apps project", function() {
     expect( window.Mimosa.EmberTest ).to.be.an('object');
     expect( window.Mimosa.EmberTest.specFiles ).to.be.an('array');
     expect( window.Mimosa.EmberTest.specFiles.length ).to.eql(2);
+    expect( window.Mimosa.EmberTest.specFiles[0] ).to.eql("admin/tests/acceptance/posts_test");
     expect( window.Mimosa.EmberTest.requireConfig ).to.be.an('object');
     expect( window.Mimosa.EmberTest.requireConfig.baseUrl ).to.be.an('string');
   });
@@ -127,6 +130,7 @@ describe("When starting up with one app application", function() {
     expect( window.Mimosa.EmberTest ).to.be.an('object');
     expect( window.Mimosa.EmberTest.specFiles ).to.be.an('array');
     expect( window.Mimosa.EmberTest.specFiles.length ).to.eql(2);
+    expect( window.Mimosa.EmberTest.specFiles[0] ).to.eql("tests/acceptance/posts_test");
     expect( window.Mimosa.EmberTest.requireConfig ).to.be.an('object');
     expect( window.Mimosa.EmberTest.requireConfig.baseUrl ).to.be.an('string');
     expect( Object.keys(window.Mimosa.EmberTest.requireConfig) ).to.eql(["baseUrl","foo","zed"]);
