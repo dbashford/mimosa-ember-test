@@ -67,9 +67,9 @@ exports.buildTestVariables = function( mimosaConfig, options, next ) {
     // sort require config
     // trying to avoid accidentally creating a diff in the output code
     var appRequireConfig = {};
-    _.sortBy( Object.keys( requireConfig ), function( k ) {
-      return -( k.length );
-    }).forEach( function( k ) {
+    var sortedKeys = Object.keys( requireConfig );
+    sortedKeys.sort();
+    sortedKeys.forEach( function( k ) {
       appRequireConfig[k] = requireConfig[k];
     });
 

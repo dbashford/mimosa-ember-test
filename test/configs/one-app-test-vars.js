@@ -1,6 +1,6 @@
 exports.config = {
   modules: [
-    'ember-test', 'require', 'bower'
+    'ember-test', 'require', 'bower', 'copy'
   ],
   emberTest: {
     apps: [{

@@ -1,6 +1,6 @@
 exports.config = {
   modules: [
-    'ember-test', 'require', 'bower'
+    'ember-test', 'require', 'bower', 'copy'
   ],
   emberTest: {
     apps: [{
@@ -10,7 +10,7 @@ exports.config = {
       requireConfig: {
         zed:"zed",
         foo:"bar",
-        baseUrl: "/javascript"        
+        baseUrl: "/javascript"
       }
     }]
   },

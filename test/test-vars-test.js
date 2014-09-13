@@ -37,6 +37,7 @@ describe("When starting up with one app application", function() {
     expect( window.Mimosa ).to.be.an('object');
     expect( window.Mimosa.EmberTest ).to.be.an('object');
     expect( window.Mimosa.EmberTest.specFiles ).to.be.an('array');
+    expect( window.Mimosa.EmberTest.specFiles.length ).to.eql(2);
     expect( window.Mimosa.EmberTest.requireConfig ).to.be.an('object');
     expect( window.Mimosa.EmberTest.requireConfig.baseUrl ).to.be.an('string');
   });
@@ -78,6 +79,7 @@ describe("When starting up with a two apps project", function() {
     expect( window.Mimosa ).to.be.an('object');
     expect( window.Mimosa.EmberTest ).to.be.an('object');
     expect( window.Mimosa.EmberTest.specFiles ).to.be.an('array');
+    expect( window.Mimosa.EmberTest.specFiles.length ).to.eql(2);
     expect( window.Mimosa.EmberTest.requireConfig ).to.be.an('object');
     expect( window.Mimosa.EmberTest.requireConfig.baseUrl ).to.be.an('string');
 
@@ -88,9 +90,45 @@ describe("When starting up with a two apps project", function() {
     expect( window.Mimosa ).to.be.an('object');
     expect( window.Mimosa.EmberTest ).to.be.an('object');
     expect( window.Mimosa.EmberTest.specFiles ).to.be.an('array');
+    expect( window.Mimosa.EmberTest.specFiles.length ).to.eql(2);
     expect( window.Mimosa.EmberTest.requireConfig ).to.be.an('object');
     expect( window.Mimosa.EmberTest.requireConfig.baseUrl ).to.be.an('string');
+  });
+});
 
+describe("When starting up with one app application", function() {
+  this.timeout(15000);
 
+  var env = utils.setupProjectData( "require-config-test-vars" );
+  var et = env.dotEmberTest;
+  var assetPath = path.join ( et, "tests", "test-variables.js" );
+
+  before(function(done){
+    utils.cleanProject( env );
+    utils.setupProject( env, "withbower" );
+
+    var cwd = process.cwd();
+    process.chdir( env.projectDir );
+    exec( "mimosa build", function ( err, sout, serr ) {
+      done();
+      process.chdir(cwd);
+    });
+  });
+
+  after(function() {
+    utils.cleanProject( env );
+  });
+
+  it( 'the test variables contain the right information with require config override', function() {
+    var varsText = fs.readFileSync( assetPath, "utf8" )
+    var window = {}
+    eval( varsText );
+    expect( window.Mimosa ).to.be.an('object');
+    expect( window.Mimosa.EmberTest ).to.be.an('object');
+    expect( window.Mimosa.EmberTest.specFiles ).to.be.an('array');
+    expect( window.Mimosa.EmberTest.specFiles.length ).to.eql(2);
+    expect( window.Mimosa.EmberTest.requireConfig ).to.be.an('object');
+    expect( window.Mimosa.EmberTest.requireConfig.baseUrl ).to.be.an('string');
+    expect( Object.keys(window.Mimosa.EmberTest.requireConfig) ).to.eql(["baseUrl","foo","zed"]);
   });
 });
