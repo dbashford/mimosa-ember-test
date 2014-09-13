@@ -7,7 +7,7 @@ var path  = require( "path" )
   , testRunnerTemplate
   , testMainTemplate
   , testVariablesTemplate
-  , testVariablesLastOutput;
+  , testVariablesLastOutput = {};
 
 var _compileTemplate = function( templateName ) {
   var templatePath = path.resolve( __dirname, "../../assets/templates/" + templateName );
@@ -78,10 +78,9 @@ exports.buildTestVariables = function( mimosaConfig, options, next ) {
       specFiles: JSON.stringify( specs.specFiles( app.testLocation ).sort(), null, 2 )
     });
 
-    if ( !testVariablesLastOutput || testVariablesLastOutput !== output ) {
-      testVariablesLastOutput = output;
-
-      var file = path.join( mimosaConfig.emberTest.assetFolderFull, app.testLocation, "test-variables.js" );
+    var file = path.join( mimosaConfig.emberTest.assetFolderFull, app.testLocation, "test-variables.js" );
+    if ( !testVariablesLastOutput[file] || testVariablesLastOutput[file] !== output ) {
+      testVariablesLastOutput[file] = output;
       fs.writeFileSync( file, output );
     }
   });
