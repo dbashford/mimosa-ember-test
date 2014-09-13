@@ -2,35 +2,26 @@
 
 var path = require( "path" )
   , fs = require( "fs" )
+  , _ = require( "lodash" )
   , logger = null;
 
-var bash =
-  "#!/bin/bash\n" +
-  "if [ \"$1\" == ci ]; then\n" +
-  "  testem ci --file \"CONFIG_FILE\"\n" +
-  "else\n" +
-  "  testem --file \"CONFIG_FILE\"\n" +
-  "fi";
+var _writeBash = function ( configFiles ) {
+  var templatePath = path.resolve( __dirname, "test.sh.template" );
+  var templateText = fs.readFileSync( templatePath );
+  var compiledTemplate = _.template( templateText );
 
-var bat =
-  "@echo off\n" +
-  "if \"%1\" == \"ci\" (\n" +
-  "  testem ci --file \"CONFIG_FILE\"\n" +
-  ") else (\n" +
-  "  testem --file \"CONFIG_FILE\"\n" +
-  ")";
-
-var _writeBash = function ( configFile ) {
-  var b = bash.replace( /CONFIG_FILE/g, configFile );
+  var content = compiledTemplate( { configFiles: configFiles, $: "$" } );
   var outPath = path.join( process.cwd(), "test.sh" );
-  fs.writeFileSync( outPath, b, { mode:0x1ff } );
+  fs.writeFileSync( outPath, content, { mode:0x1ff } );
+
   return outPath;
 };
 
-var _writeBat = function ( configFile ) {
-  var b = bat.replace( /CONFIG_FILE/g, configFile );
+var _writeBat = function ( configFiles ) {
+  // TODO windows batch file...
+  var content = '';
   var outPath = path.join( process.cwd(), "test.bat" );
-  fs.writeFileSync( outPath, b, { mode:0x1ff } );
+  fs.writeFileSync( outPath, content, { mode:0x1ff } );
   return outPath;
 };
 
@@ -40,12 +31,15 @@ var _test = function( config, opts ) {
     return logger.error( "testscript command used, but mimosa-ember-test not configured as project module." );
   }
 
-  var relativePath = path.relative( config.root, config.testemSimple.configFile );
+  var relativePaths = config.testemSimple.configFile.map( function( configFile ) {
+    return path.relative( config.root, configFile );
+  });
+
   var outPath;
   if ( opts.windows || ( !opts.bash && process.platform === "win32" ) ) {
-    outPath = _writeBat( relativePath );
+    outPath = _writeBat( relativePaths );
   } else {
-    outPath = _writeBash( relativePath );
+    outPath = _writeBash( relativePaths );
   }
 
   logger.success( "Wrote test execution script to [[ " + outPath + " ]]" );

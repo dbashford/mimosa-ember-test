@@ -1,0 +1,31 @@
+#!/bin/bash
+
+options=(
+<% for (var i = 0; i < configFiles.length; i++) { %>  "<%= configFiles[i] %>"
+<% } %>)
+
+if [ "$1" == ci ]; then
+  for opt in "<%= $ %>{options[@]}"
+  do
+    set -x
+    testem ci --file "$opt"
+    { set +x; } 2>/dev/null
+  done
+else
+  if [ <%= $ %>{#options[@]} -gt 1 ]; then
+    echo "Available testem config files:"
+    PS3="Please make a selection: "
+
+    select opt in "<%= $ %>{options[@]}"
+    do
+      if [ -n "$opt" ]; then
+        testem --file "$opt"
+        break
+      else
+        printf "Invalid option. "
+      fi
+    done
+  else
+    testem --file <%= $ %>{options[0]}
+  fi
+fi
