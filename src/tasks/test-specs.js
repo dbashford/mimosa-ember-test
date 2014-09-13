@@ -19,7 +19,7 @@ var _run = function( mimosaConfig, options, manipulateSpec ) {
     var filename = file.outputFileName;
     if ( specConvention.test( filename ) ) {
       apps.forEach( function( app ) {
-        if ( filename.indexOf( path.join( root, app.testLocation ) ) === 0 ) {
+        if ( filename.indexOf( path.join( root, app.testLocation ) + path.sep ) === 0 ) {
           manipulateSpec( _specPath( root, filename ), app.testLocation );
         }
       });

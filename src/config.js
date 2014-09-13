@@ -2,6 +2,7 @@
 
 var path = require( "path" )
   , fs = require( "fs" )
+  , _ = require( "lodash" )
   , testemSimple = require( "mimosa-testem-simple" )
   , bower = require( "./bower" );
 
@@ -186,14 +187,16 @@ exports.validate = function( config, validators ) {
     validators.isString( errors, "emberTest.emberAMDPath", et.emberAMDPath );
     validators.isRegex( errors, "emberTest.specConvention", et.specConvention );
 
-    if ( et.assetFolderFull ) {
-      config.testemSimple.configFile = path.join( et.assetFolderFull, "testem.json" );
-    }
-
     validators.isBoolean( errors, "emberTest.bowerTestAssets", et.bowerTestAssets );
   }
 
   if ( errors.length === 0 ) {
+    // Update the testemSimple config
+    var testLocations = _.pluck( et.apps, "testLocation" );
+    config.testemSimple.configFile = testLocations.map( function( testLocation ) {
+      return path.join( et.assetFolderFull, testLocation, "testem.json" );
+    });
+
     bower.handleBower( config, errors );
     _determineIfRequireModuleNeeded( config, errors );
   }

@@ -42,18 +42,18 @@ var registration = function( mimosaConfig, register ) {
   register( ["postBuild"], "init", testEnv.buildTestRunner );
   register( ["postBuild"], "init", testEnv.buildTestVariables );
 
-  // register( ["add", "update"], "afterCompile", testSpecs.buildSpec, js );
-  // register( ["buildFile"], "init", testSpecs.buildSpec, js );
-  // register( ["remove"], "afterDelete", testSpecs.removeSpec, js );
-  //
-  // register( ["add","update","remove"], "afterWrite", testEnv.buildTestVariables, js );
+  register( ["add", "update"], "afterCompile", testSpecs.buildSpec, js );
+  register( ["buildFile"], "init", testSpecs.buildSpec, js );
+  register( ["remove"], "afterDelete", testSpecs.removeSpec, js );
 
-  // if (
-  //     ( mimosaConfig.emberTest.executeDuringBuild && mimosaConfig.isBuild ) ||
-  //     ( mimosaConfig.emberTest.executeDuringWatch && mimosaConfig.isWatch ) ) {
-  //   testemSimple = require( "mimosa-testem-simple" )
-  //   testemSimple.registration( mimosaConfig, register );
-  // }
+  register( ["add","update","remove"], "afterWrite", testEnv.buildTestVariables, js );
+
+   if (
+       ( mimosaConfig.emberTest.executeDuringBuild && mimosaConfig.isBuild ) ||
+       ( mimosaConfig.emberTest.executeDuringWatch && mimosaConfig.isWatch ) ) {
+     var testemSimple = require( "mimosa-testem-simple" );
+     testemSimple.registration( mimosaConfig, register );
+   }
 };
 
 module.exports = {

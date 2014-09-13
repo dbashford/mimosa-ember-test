@@ -33,15 +33,12 @@ exports.writeTestemConfig = function( mimosaConfig, options, next ) {
   var baseTestemConfig = _craftBaseTestemConfig( mimosaConfig, _.clone( currentTestemConfig ) );
 
   mimosaConfig.emberTest.apps.forEach( function( app ) {
-    var testRunner = path.join( mimosaConfig.emberTest.assetFolder, app.testLocation, "runner.html" );
+    var testDir = path.join( mimosaConfig.emberTest.assetFolder, app.testLocation );
 
-    var testemConfig = _.extend( baseTestemConfig, { test_page: testRunner } );
+    var testemConfig = _.extend( baseTestemConfig, { "test_page": path.join( testDir, "runner.html" ) } );
     var testemConfigPretty = JSON.stringify( testemConfig, null, 2 );
 
-    var fileName = mimosaConfig.testemSimple.configFile;
-    var basename = path.basename(fileName);
-    fileName = fileName.replace(basename, path.join( app.testLocation, basename ) );
-
+    var fileName = path.join( testDir, "testem.json" );
     mimosaConfig.log.debug( "Writing testem configuration to [[ " + fileName + " ]]" );
     fs.writeFileSync( fileName, testemConfigPretty );
   });
