@@ -63,7 +63,7 @@ describe("When starting up with a two apps project", function() {
   });
 
   after(function() {
-    // utils.cleanProject( env );
+    utils.cleanProject( env );
   });
 
   it( 'the test-variables files will be written to the correct folders', function() {
