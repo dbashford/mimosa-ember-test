@@ -1,0 +1,14 @@
+{
+  "routes": {
+    "/js": "public/javascripts",
+    "/ember-test": ".mimosa/emberTest"
+  },
+  "launch_in_dev": [
+    "Firefox",
+    "Chrome"
+  ],
+  "launch_in_ci": [
+    "PhantomJS"
+  ],
+  "test_page": ".mimosa/emberTest/admin/tests/runner.html"
+}

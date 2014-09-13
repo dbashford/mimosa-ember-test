@@ -1,0 +1,63 @@
+{
+  "watch": true,
+  "bowerDir": {
+    "path": ".mimosa/bower/bower_components",
+    "clean": true,
+    "pathFull": ""
+  },
+  "copy": {
+    "enabled": true,
+    "trackChanges": true,
+    "outRoot": "",
+    "defaultStrategy": "packageRoot",
+    "strategy": {},
+    "forceLatest": true,
+    "exclude": [],
+    "unknownMainFullCopy": false,
+    "overridesArrays": {
+      "requirejs": [
+        "require.js"
+      ]
+    },
+    "overridesObjects": {
+      "qunit": {
+        "qunit/qunit.js": "../../../.mimosa/emberTest/vendor/qunit.js",
+        "qunit/qunit.css": "../../../.mimosa/emberTest/vendor/qunit.css"
+      },
+      "requirejs": {
+        "require.js": "../../../.mimosa/emberTest/vendor/require.js"
+      },
+      "sinonjs": {
+        "sinon.js": "../../../.mimosa/emberTest/vendor/sinon.js"
+      },
+      "ember-qunit": {
+        "dist/amd": "../../../.mimosa/emberTest/vendor/ember-qunit"
+      }
+    },
+    "mainOverrides": {
+      "qunit": [
+        {
+          "qunit/qunit.js": "../../../.mimosa/emberTest/vendor/qunit.js",
+          "qunit/qunit.css": "../../../.mimosa/emberTest/vendor/qunit.css"
+        }
+      ],
+      "requirejs": [
+        "require.js",
+        {
+          "require.js": "../../../.mimosa/emberTest/vendor/require.js"
+        }
+      ],
+      "sinonjs": [
+        {
+          "sinon.js": "../../../.mimosa/emberTest/vendor/sinon.js"
+        }
+      ],
+      "ember-qunit": [
+        {
+          "dist/amd": "../../../.mimosa/emberTest/vendor/ember-qunit"
+        }
+      ]
+    },
+    "pathMod": null
+  }
+}

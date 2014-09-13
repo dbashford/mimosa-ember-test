@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mimosa Ember Tests | admin/tests</title>
+
+    <link rel="stylesheet" href="/ember-test/vendor/qunit.css">
+
+    <style>
+      #ember-testing-container {
+        position: absolute;
+        background: #fff;
+        bottom: 0;
+        right: 0;
+        width: 640px;
+        height: 384px;
+        overflow: auto;
+        z-index: 9999;
+        border: 1px solid #ccc;
+      }
+
+      #ember-testing {
+        zoom: 50%;
+        -moz-transform: scale(0.5);
+        -moz-transform-origin: 0 0;
+      }
+    </style>
+
+    <script src="/ember-test/vendor/qunit.js"></script>
+    <script src="/ember-test/vendor/sinon.js"></script>
+    <script src="/ember-test/vendor/require.js"></script>
+    <script src="test-variables.js"></script>
+    <script src="test-main.js"></script>
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <div id="ember-testing-container">
+      <div id="ember-testing"></div>
+   </div>
+  </body>
+</html>
