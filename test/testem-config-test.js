@@ -26,12 +26,12 @@ describe("When starting up a one app application", function() {
   });
 
   it( 'the testem config will be written to the correct folder', function() {
-    var assetPath = path.join ( et, "testem.json" );
+    var assetPath = path.join ( et, "tests", "testem.json" );
     expect(fs.existsSync( assetPath) ).to.be.true;
   });
 
   it( 'the testem config contain the right information', function() {
-    var assetPath = path.join ( et, "testem.json" );
+    var assetPath = path.join ( et, "tests", "testem.json" );
     var testemJSON = JSON.parse( fs.readFileSync(assetPath, "utf8" ) );
     expect( testemJSON.test_page ).to.eql(".mimosa/emberTest/tests/runner.html");
   });
@@ -62,16 +62,16 @@ describe("When starting up a two app application", function() {
   });
 
   it( 'the testem configs will be written to the correct folder', function() {
-    var assetPath1 = path.join ( et, "testem1.json" );
-    var assetPath2 = path.join ( et, "testem2.json" );
+    var assetPath1 = path.join ( et, "blogger", "tests", "testem.json" );
+    var assetPath2 = path.join ( et, "admin", "tests", "testem.json" );
 
     expect(fs.existsSync( assetPath1 ) ).to.be.true;
     expect(fs.existsSync( assetPath2 ) ).to.be.true;
   });
 
   it( 'the testem config contain the right information', function() {
-    var assetPath1 = path.join ( et, "testem1.json" );
-    var assetPath2 = path.join ( et, "testem2.json" );
+    var assetPath1 = path.join ( et, "blogger", "tests", "testem.json" );
+    var assetPath2 = path.join ( et, "admin", "tests", "testem.json" );
     var testemJSON1 = JSON.parse( fs.readFileSync(assetPath1, "utf8" ) );
     var testemJSON2 = JSON.parse( fs.readFileSync(assetPath2, "utf8" ) );
 

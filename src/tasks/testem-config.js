@@ -21,7 +21,7 @@ var _craftBaseTestemConfig = function ( mimosaConfig, currentTestemConfig ) {
 
 exports.writeTestemConfig = function( mimosaConfig, options, next ) {
   var currentTestemConfig = {};
-  if( fs.existsSync( mimosaConfig.testemSimple.configFile ) ) {
+  if ( fs.existsSync( mimosaConfig.testemSimple.configFile ) ) {
     try {
       currentTestemConfig = require( mimosaConfig.testemSimple.configFile );
     } catch ( err ) {
@@ -32,35 +32,18 @@ exports.writeTestemConfig = function( mimosaConfig, options, next ) {
 
   var baseTestemConfig = _craftBaseTestemConfig( mimosaConfig, _.clone( currentTestemConfig ) );
 
-  // write runner per-app
-  var moreThanOne = mimosaConfig.emberTest.apps.length > 1;
-  mimosaConfig.emberTest.apps.forEach( function( app, i ) {
-
-    if ( !moreThanOne ) {
-      i = "";
-    } else {
-      i += 1;
-    }
-
-    // add test runner page
-    /* eslint camelcase:0 */
+  mimosaConfig.emberTest.apps.forEach( function( app ) {
     var testRunner = path.join( mimosaConfig.emberTest.assetFolder, app.testLocation, "runner.html" );
 
-    var testemConfig = _.extend(
-      baseTestemConfig,
-      { test_page: testRunner } );
-
+    var testemConfig = _.extend( baseTestemConfig, { test_page: testRunner } );
     var testemConfigPretty = JSON.stringify( testemConfig, null, 2 );
 
-    if ( JSON.stringify( currentTestemConfig, null, 2 ) !== testemConfigPretty ) {
-      mimosaConfig.log.debug( "Writing testem configuration to [[ " + mimosaConfig.testemSimple.configFile + " ]]" );
-      var fileName = mimosaConfig.testemSimple.configFile;
-      if ( moreThanOne ) {
-        var ext = path.extname( mimosaConfig.testemSimple.configFile );
-        fileName = fileName.replace( ext, i + ext );
-      }
-      fs.writeFileSync( fileName, testemConfigPretty );
-    }
+    var fileName = mimosaConfig.testemSimple.configFile;
+    var basename = path.basename(fileName);
+    fileName = fileName.replace(basename, path.join( app.testLocation, basename ) );
+
+    mimosaConfig.log.debug( "Writing testem configuration to [[ " + fileName + " ]]" );
+    fs.writeFileSync( fileName, testemConfigPretty );
   });
 
   next();
