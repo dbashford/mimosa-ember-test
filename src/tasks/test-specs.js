@@ -4,9 +4,10 @@ var path = require( "path" )
   , specFiles = {};
 
 var _specPath = function( root, filename ) {
-  var specPath = path.relative( root, filename );
-  specPath = specPath.replace( path.extname( specPath ), "" );
-  specPath = specPath.split( path.sep ).join( "/" );
+  var specPath = path.relative( root, filename )
+    .replace( path.extname( filename ), "" )
+    .split( path.sep )
+    .join( "/" );
   return specPath;
 };
 

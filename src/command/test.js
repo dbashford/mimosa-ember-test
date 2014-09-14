@@ -19,7 +19,7 @@ var _writeBash = function ( configFiles ) {
 
 var _writeBat = function ( configFiles ) {
   // TODO windows batch file...
-  var content = '';
+  var content = "";
   var outPath = path.join( process.cwd(), "test.bat" );
   fs.writeFileSync( outPath, content, { mode:0x1ff } );
   return outPath;
