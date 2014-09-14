@@ -4,7 +4,7 @@ options=(
 <% for (var i = 0; i < configFiles.length; i++) { %>  "<%= configFiles[i] %>"
 <% } %>)
 
-if [ "$1" == ci ]; then
+if [ "$1" == "ci" ]; then
   for opt in "<%= $ %>{options[@]}"
   do
     set -x
@@ -12,20 +12,21 @@ if [ "$1" == ci ]; then
     { set +x; } 2>/dev/null
   done
 else
-  if [ <%= $ %>{#options[@]} -gt 1 ]; then
-    echo "Available testem config files:"
-    PS3="Please make a selection: "
-
-    select opt in "<%= $ %>{options[@]}"
-    do
-      if [ -n "$opt" ]; then
-        testem --file "$opt"
-        break
-      else
-        printf "Invalid option. "
-      fi
-    done
+  len=<%= $ %>{#options[@]}
+  if [ $len -gt 1 ]; then
+    if [[ $1 =~ ^-?[0-9]+$ ]] && [ $1 -gt 0 ] && [ $1 -le $len ]; then
+      idx=$1-1
+      testem --file "<%= $ %>{options[$idx]}"
+    else
+      echo
+      echo "Usage: ./test.sh [test_number]"
+      echo
+      for i in "<%= $ %>{!options[@]}"; do
+        printf "[%s] %s\n" "$((i+1))" "<%= $ %>{options[$i]}"
+      done
+      echo
+    fi
   else
-    testem --file <%= $ %>{options[0]}
+    testem --file "<%= $ %>{options[0]}"
   fi
 fi

@@ -1,0 +1,49 @@
+@echo off
+setlocal EnableDelayedExpansion
+
+<% for (var i = 0; i < configFiles.length; i++) { %>set configFiles[<%= i %>]="<%= configFiles[i] %>"
+<% } %>
+
+if "%1" == "ci" goto run_testem_ci
+goto run_testem
+
+:show_help
+echo.
+echo Usage: test.bat [test_number]
+echo.
+set i=1
+for /f "tokens=2 delims==" %%f in ('set configFiles[') do (
+  echo [!i!] %%f
+  set /a i+=1
+)
+echo.
+goto end
+
+:run_testem
+set i=1
+for /f "tokens=2 delims==" %%f in ('set configFiles[') do (
+  set configFile=%%f
+  if "%1" == "!i!" (
+    goto run_testem_dev
+  )
+  set /a i+=1
+)
+if %i% == 2 goto run_testem_dev
+goto show_help
+
+:run_testem_dev
+testem --file %configFile%
+goto end
+
+:run_testem_ci
+for /f "tokens=2 delims==" %%f in ('set configFiles[') do (
+  if defined command (
+    set command="!command! && echo + testem ci --file `%%f` && testem ci --file `%%f`"
+  ) else (
+    set command="echo + testem ci --file `%%f` && testem ci --file `%%f`"
+  )
+)
+set command=!command:"=!
+%command:`="%
+
+:end

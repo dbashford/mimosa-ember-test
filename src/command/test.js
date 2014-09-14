@@ -5,26 +5,17 @@ var path = require( "path" )
   , _ = require( "lodash" )
   , logger = null;
 
-var _writeBash = function ( configFiles ) {
-  var templatePath = path.resolve( __dirname, "test.sh.template" );
+var _writeScript = function ( ext, configFiles ) {
+  var templatePath = path.resolve( __dirname, "test." + ext + ".template" );
   var templateText = fs.readFileSync( templatePath );
   var compiledTemplate = _.template( templateText );
 
   var content = compiledTemplate( { configFiles: configFiles, $: "$" } );
-  var outPath = path.join( process.cwd(), "test.sh" );
+  var outPath = path.join( process.cwd(), "test." + ext );
   fs.writeFileSync( outPath, content, { mode:0x1ff } );
 
   return outPath;
 };
-
-var _writeBat = function ( configFiles ) {
-  // TODO windows batch file...
-  var content = "";
-  var outPath = path.join( process.cwd(), "test.bat" );
-  fs.writeFileSync( outPath, content, { mode:0x1ff } );
-  return outPath;
-};
-
 
 var _test = function( config, opts ) {
   if ( !config.testemSimple ) {
@@ -37,9 +28,9 @@ var _test = function( config, opts ) {
 
   var outPath;
   if ( opts.windows || ( !opts.bash && process.platform === "win32" ) ) {
-    outPath = _writeBat( relativePaths );
+    outPath = _writeScript("bat", relativePaths );
   } else {
-    outPath = _writeBash( relativePaths );
+    outPath = _writeScript("sh", relativePaths );
   }
 
   logger.success( "Wrote test execution script to [[ " + outPath + " ]]" );
