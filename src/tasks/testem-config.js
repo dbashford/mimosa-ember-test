@@ -34,8 +34,13 @@ exports.writeTestemConfig = function( mimosaConfig, options, next ) {
 
   mimosaConfig.emberTest.apps.forEach( function( app ) {
     var testDir = path.join( mimosaConfig.emberTest.assetFolder, app.testLocation );
+    var testPage = path.join( testDir, "runner.html" );
+    if ( path.sep !== "/" ) {
+      testPage = testPage.split( path.sep ).join( "/" );
+    }
+
     var testemConfig = _.extend(
-      baseTestemConfig, { "test_page": path.join( testDir, "runner.html" ) } );
+      baseTestemConfig, { "test_page": testPage } );
     var testemConfigPretty = JSON.stringify( testemConfig, null, 2 );
     var fileName = path.join( testDir, "testem.json" );
     fs.writeFileSync( fileName, testemConfigPretty );
