@@ -9,7 +9,8 @@ exports.config = {
     }, {
       testLocation: "admin/tests",
       testAppFactory: "create_test_app"
-    }]
+    }],
+    executeDuringBuild: false
   },
   logger: {
     growl: {

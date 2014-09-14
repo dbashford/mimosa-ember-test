@@ -8,5 +8,8 @@ exports.config = {
     growl: {
       enabled: false
     }
+  },
+  emberTest: {
+    executeDuringBuild: false
   }
 };

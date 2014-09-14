@@ -8,7 +8,7 @@ exports.config = {
       requireConfig: null
     }],
     emberAMDPath: "ember",
-    executeDuringBuild: true,
+    executeDuringBuild: false,
     executeDuringWatch: false,
     safeAssets: [],
     specConvention: /[_-](spec|test)\.js$/,

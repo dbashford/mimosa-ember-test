@@ -3,7 +3,8 @@ exports.config = {
     'ember-test', 'require'
   ],
   emberTest:{
-    bowerTestAssets: false
+    bowerTestAssets: false,
+    executeDuringBuild: false
   },
   logger: {
     growl: {

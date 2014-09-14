@@ -8,7 +8,8 @@ exports.config = {
       testAppFactory: "create_test_app",
       stylesheetPaths: [],
       requireConfig: {}
-    }]
+    }],
+    executeDuringBuild: false
   },
   logger: {
     growl: {

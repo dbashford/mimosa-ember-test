@@ -12,7 +12,8 @@ exports.config = {
         foo:"bar",
         baseUrl: "/javascript"
       }
-    }]
+    }],
+    executeDuringBuild: false
   },
   logger: {
     growl: {
