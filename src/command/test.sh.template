@@ -14,7 +14,7 @@ if [ "$1" == "ci" ]; then
 else
   len=<%= $ %>{#options[@]}
   if [ $len -gt 1 ]; then
-    if [[ $1 =~ ^-?[0-9]+$ ]] && [ $1 -gt 0 ] && [ $1 -le $len ]; then
+    if [ "$1" -gt "0" 2> /dev/null ] && [ "$1" -le "$len" ]; then
       idx=$1-1
       testem --file "<%= $ %>{options[$idx]}"
     else
