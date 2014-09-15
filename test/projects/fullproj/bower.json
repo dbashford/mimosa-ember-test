@@ -1,0 +1,19 @@
+{
+  "name": "MimosaEmberSkeleton",
+  "version": "0.0.1",
+  "dependencies": {
+    "jquery": "2.0.3",
+    "requirejs": "2.1.14",
+    "ember":"1.7.0",
+    "handlebars":"1.3.0",
+    "showdown": "0.3.1",
+    "moment":"2.8.1",
+    "bootstrap": "3.2.0"
+  },
+  "devDependencies": {
+    "qunit": "1.14.0",
+    "requirejs": "2.1.14",
+    "sinonjs": "1.10.2",
+    "ember-qunit":"0.1.8"
+  }
+}
