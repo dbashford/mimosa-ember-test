@@ -32,6 +32,17 @@ NOTE: This module requires Mimosa `2.3.14` to function properly, if this is an i
 
 By default, `ember-test` will use Bower to incorporate those vendor test assets.  This module understands how [mimosa-bower](https://github.com/dbashford/mimosa-bower) works, and coordinates with mimosa-bower to get these specific tests assets into the right location inside `.mimosa/emberTest`.  If you do not change the default away from Bower, `ember-test` will verify you have a `bower.json` and check that file to make sure the right libraries are present.  If they are _not_, `ember-test` will stop Mimosa from starting up with a validation error.
 
+The following is an example of the update necessary for your `bower.json`. If you already have `requirejs` in your `dependencies` you do not need to include it here. This documentation may fall out of date with versions.
+
+```javascript
+"devDependencies": {
+  "qunit": "1.14.0",
+  "requirejs": "2.1.14",
+  "sinonjs": "1.10.2",
+  "ember-qunit":"0.1.8"
+}
+```
+
 If you prefer to not use Bower, set `bowerTestAssets` to `false` and `ember-test` will copy in versions of the vendor files that [it maintains](https://github.com/dbashford/mimosa-ember-test/tree/master/assets/vendor).
 
 ### Generated Test Assets
