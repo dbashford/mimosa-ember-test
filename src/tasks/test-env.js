@@ -60,7 +60,13 @@ exports.buildTestVariables = function( mimosaConfig, options, next ) {
   }
 
   mimosaConfig.emberTest.apps.forEach( function( app ) {
-    var requireConfig = app.requireConfig || mimosaRequireConfig;
+    var requireConfig;
+    if ( typeof app.requireConfig === "function" ) {
+      requireConfig = mimosaRequireConfig || {};
+      app.requireConfig( requireConfig );
+    } else {
+      requireConfig = app.requireConfig || mimosaRequireConfig;
+    }
 
     requireConfig.baseUrl = requireConfig.baseUrl || "/js";
 
