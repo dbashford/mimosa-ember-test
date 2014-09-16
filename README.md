@@ -7,7 +7,7 @@ This is a [Mimosa](http://mimosa.io) module that integrates a qunit/testem test 
 
 Client JavaScript testing requires a good deal of configuration to set up, as well as plenty of research and trial and error before you can start writing tests. Ember.js apps require a bit more than other apps to get set up correctly.
 
-The goal of this module is to keep the amount of configuration you need to create to a minimum.  Out of the box it requires no configuration. The module writes its own configuration derived from your project. Include the module and start writing tests.
+The goal of this module is to keep test setup to a minimum. Out of the box it requires no configuration. The module writes its own configuration derived from your project. In most cases you can include the module and start writing tests.
 
 This module incorporates [QUnit](http://qunitjs.com/), [ember-qunit](https://github.com/rwjblue/ember-qunit), [Sinon](http://sinonjs.org/), [Testem](https://github.com/airportyh/testem) and [PhantomJS](http://phantomjs.org/).
 
