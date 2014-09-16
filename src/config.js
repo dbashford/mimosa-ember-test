@@ -47,11 +47,11 @@ exports.placeholder = function() {
     "                                  # tests for this app. Example: \"/public/stylesheets/vendor.css\"\n" +
     "      requireConfig: null         # RequireJS configuration. By default the mimosa-require\n" +
     "                                  # module is used by mimosa-ember-test to derive a\n" +
-    "                                  # requirejs config.  But if that derived config isn't right\n" +
+    "                                  # requirejs config. But if that derived config isn't right\n" +
     "                                  # a config can be pasted here. This parameter takes either\n" +
     "                                  # an object which overrides the requirejs config, or a function\n" +
-    "                                  # which takes the inferred config as input and can return a\n" +
-    "                                  # modified config\n" +
+    "                                  # which takes the inferred config as input which allow it to be\n" +
+    "                                  # modified before it is used/included\n" +
     "    }]\n" +
     "    emberAMDPath: \"ember\"       # AMD path to ember.\n" +
     "    executeDuringBuild            # If true the tests will get executed during build.\n" +

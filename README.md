@@ -3,15 +3,17 @@ mimosa-ember-test
 
 ## Overview
 
-This is a [Mimosa](http://mimosa.io) module that integrates a qunit/testem test scaffold into your RequireJS-enabled Mimosa application.
+This is a [Mimosa](http://mimosa.io) module that integrates a qunit/testem test scaffold into your RequireJS/EmberJS Mimosa application.
 
-Client JavaScript testing requires a good deal of configuration to set up, as well as plenty of research and trial and error before you can start writing tests. The goal of this module is to keep the amount of configuration you need to create to a minimum.  Out of the box it requires no configuration. The module writes its own configuration derived from your project. Include the module and start writing tests!
+Client JavaScript testing requires a good deal of configuration to set up, as well as plenty of research and trial and error before you can start writing tests. Ember.js apps require a bit more than other apps to get set up correctly.
+
+The goal of this module is to keep the amount of configuration you need to create to a minimum.  Out of the box it requires no configuration. The module writes its own configuration derived from your project. Include the module and start writing tests.
 
 This module incorporates [QUnit](http://qunitjs.com/), [ember-qunit](https://github.com/rwjblue/ember-qunit), [Sinon](http://sinonjs.org/), [Testem](https://github.com/airportyh/testem) and [PhantomJS](http://phantomjs.org/).
 
 For more information regarding Mimosa, see http://mimosa.io
 
-NOTE: This module requires Mimosa `2.3.10` to function properly, if this is an issue, please file a GitHub request to address.
+NOTE: This module requires Mimosa `2.3.14` to function properly, if this is an issue, please file a GitHub request to address.
 
 ## Usage
 
@@ -21,11 +23,28 @@ NOTE: This module requires Mimosa `2.3.10` to function properly, if this is an i
 
 ## Functionality
 
-`ember-test` will create a series of assets it needs for testing in `.mimosa/emberTest` at the root of your project.  That includes `runner.html`, `qunit.js`, `qunit.css`, `sinon.js`, and a copy of `require.js`.  It also includes a file for kicking off tests, and a file declaring your test files and requirejs config that is dynamically generated based on your code.
+`ember-test` does all of its work in the `.mimosa/emberTest` folder (location configurable). It wants to keep all the scaffolding, test setup and test libraries out of your application.
 
-`ember-test` also generates a `testem.json` config file for configuring the test running.  By default that testem is configured to run all your qunit tests in a PhantomJS headless browser.
+### Vendor Assets
 
-When running `mimosa build` starts up `ember-test` will write all the assets and execute your tests. If all the tests pass, a message will say as much on the console and you will not be notified any other way.  If tests fail,  the console will have the details of the test failure and a Growl message will get sent letting you know a test has broken.
+`ember-test` expects [QUnit](http://qunitjs.com/),  [ember-qunit](https://github.com/rwjblue/ember-qunit), [Sinon](http://sinonjs.org/), and require.js to be available. `ember-test` fabricates test runners and test scaffolding that depends on those libraries.
+
+By default, `ember-test` will use Bower to incorporate those vendor test assets.  This module understands how [mimosa-bower](https://github.com/dbashford/mimosa-bower) works, and coordinates with mimosa-bower to get these specific tests assets into the right location inside `.mimosa/emberTest`.  If you do not change the default away from Bower, `ember-test` will verify you have a `bower.json` and check that file to make sure the right libraries are present.  If they are _not_, `ember-test` will stop Mimosa from starting up with a validation error.
+
+If you prefer to not use Bower, set `bowerTestAssets` to `false` and `ember-test` will copy in versions of the vendor files that [it maintains](https://github.com/dbashford/mimosa-ember-test/tree/master/assets/vendor).
+
+### Generated Test Assets
+
+`ember-test` also generates test scaffold assets for each app configured in your project.  Those assets include
+
+* `testem.json` file which configures how testem runs
+* `runner.html` which is the file loaded in the browser to start the tests
+* `test-main.js` which uses require.js to load both the vendor testing assets and the application tests before then kicking off the tests
+* `test-variables.js` which contains JavaScript variables for your require.js config and an array of paths to your tests.
+
+### Running
+
+When `mimosa build` starts up `ember-test` will write all the assets and execute your tests. If all the tests pass, a message will indicate that on the console and you will not be notified any other way.  If tests fail,  the console will have the details of the test failure and a Growl message will get sent letting you know a test has broken.
 
 ## Command
 
@@ -48,18 +67,43 @@ test.sh ci
 
 ## Default Config
 
+apps: [{
+  testLocation: "tests",
+  testAppFactory: "create_test_app",
+  stylesheetPaths: [],
+  requireConfig: null
+}],
+emberAMDPath: "ember",
+executeDuringBuild: true,
+executeDuringWatch: false,
+safeAssets: [],
+specConvention: /[_-](spec|test)\.js$/,
+assetFolder: ".mimosa/emberTest",
+testemConfig: {
+  "launch_in_dev": ["Firefox", "Chrome"],
+  "launch_in_ci": ["PhantomJS"]
+}
+
+
 ```javascript
 emberTest: {
+  apps: [{
+    testLocation: "tests",
+    testAppFactory: "create_test_app",
+    stylesheetPaths: [],
+    requireConfig: null
+  }],
+  bowerTestAssets: true,
+  emberAMDPath: "ember",
   executeDuringBuild: true,
   executeDuringWatch: false,
   safeAssets: [],
   specConvention: /[_-](spec|test)\.js$/,
-  assetFolder:".mimosa/emberTest",
+  assetFolder: ".mimosa/emberTest",
   testemConfig: {
     "launch_in_dev": ["Firefox", "Chrome"],
     "launch_in_ci": ["PhantomJS"]
-  },
-  requireConfig: null
+  }
 }
 
 testemSimple: {
@@ -69,12 +113,16 @@ testemSimple: {
   exclude:[],
 }
 ```
-
-* `executeDuringBuild`: Determines whether mimosa will automatically execute the tests during build.
-* `executeDuringWatch`: Determines whether mimosa will automatically execute the tests during watch as files are changed.  Defaults to being off as ember tests can run slowly.
+* `apps`, an array of objects, configuration for all the ember applications in your project.  Can be just a single app.
+* `apps.testLocation`, a string, the path, relative to `watch.javascriptDir` where this ember app's test assets live
+* `apps.testAppFactory`, a string, the location, relative to `testLocation`, where a file exporting a function capable of generating a test-ready version of this ember app is located
+* `apps.requireConfig`, an object or function, the configuration used by require.js in your tests for this app. By default this does not need to be provided. `ember-test` will derive this from your project. To see what it derives, look at `.mimosa/emberTest/test-variables.js`. If an object is provided, it will be used instead of the derived config. If a function is provided, that function will be called and provided the derived config. This gives you a chance to just tweak a few properties if that is all that is needed.
+* `bowerTestAssets`, a boolean, when set to `true` this module will attempt to use mimosa-bower to load in vendor test assets
+* `emberAMDPath`, a string, the AMD path for ember, which is often aliased to `"ember"`, so that is the default
+* `executeDuringBuild`, a boolean, determines whether mimosa will automatically execute the tests during build.
+* `executeDuringWatch`, a boolean, determines whether mimosa will automatically execute the tests during watch as files are changed.  Defaults to being off as ember tests can run slowly.
 * `safeAssets`: You may choose to alter the assets that Mimosa writes, for instance to use your own version of qunit.  Mimosa by default will overwrite the files in this folder.  If you don't want your file overwritten, add the name of the file to this array.  Just the name, no paths necessary.
-* `specConvention`: This is the regex `ember-test` uses to identify your tests. It'll run this regex against every compiled file to determine if it is indeed a test and if it is, `ember-test` will include it in the list of tests to be run.
-*  `assetFolder`: This is the folder `ember-test` places its assets.
-*  `testemConfig`: This is testem's configuration.  `ember-test` uses this default, which just defines the browsers to run the tests in, and then amplifies it with a few other computed properties
-*  `requireConfig` This is the configuration used by require.js in your tests.  By default `ember-test` derives this from your project.  To see what it derives, look at `.mimosa/emberTest/test-variables.js`.
-* `testemSimple`: this module wraps the [mimosa-testem-simple](https://github.com/dbashford/mimosa-testem-simple) module. It overrides the `testemSimple.configFile` property to point at `assetFolder` + `testem.json`.  The other testem-simple config can be updated/modified directly. See the [config for testem-simple](https://github.com/dbashford/mimosa-testem-simple#default-config) to see how you can use it via ember-test.
+* `specConvention`, a regex, this is the regex `ember-test` uses to identify your tests. It'll run this regex against every compiled file to determine if it is indeed a test and if it is, `ember-test` will include it in the list of tests to be run.
+*  `assetFolder`, a string, the folder `ember-test` places its assets. It is relative to the root of your project.
+*  `testemConfig`, an object, testem configuration that `ember-test` uses as default. This default defines the browsers to run the tests in. `ember-test` amplifies this with a few other computed properties
+* `testemSimple`: `ember-test` wraps the [mimosa-testem-simple](https://github.com/dbashford/mimosa-testem-simple) module. It overrides the `testemSimple.configFile` property to point the `testem.json` files it creates.  The other testem-simple config can be updated/modified directly. The [config for testem-simple](https://github.com/dbashford/mimosa-testem-simple#default-config) allows you to tweak how testem is run.
