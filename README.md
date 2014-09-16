@@ -19,6 +19,7 @@ NOTE: This module requires Mimosa `2.3.14` to function properly, if this is an i
 
 * `npm install -g phantomjs` (If you are on Windows, this will not install phantomjs properly. You will need to [download phantomjs from the site](http://phantomjs.org/download.html) and add the executable to your `PATH`)
 * Add `'ember-test'` to your list of modules.  Mimosa will install the module for you when you start up.
+* Check the [default config](https://github.com/dbashford/mimosa-ember-test#default-config) to verify it syncs with your app.  If it doesn't, you'll have a few things to configure/update.
 * Write tests!  By default `ember-test` considers any file compiled/copied to `watch.compiledDir` that ends with `-spec.js`, `_spec.js`, `-test.js` or `_test.js` a test.
 
 ## Functionality
@@ -95,6 +96,14 @@ testemSimple: {
   exclude:[],
 }
 ```
+
+#####apps `array of objects`
+The configuration for all the ember applications in your project.  Can be just a single app.
+#####apps.testLocation `string`
+The path, relative to `watch.javascriptDir` where this ember app's test assets live
+
+
+
 * `apps`, an array of objects, configuration for all the ember applications in your project.  Can be just a single app.
 * `apps.testLocation`, a string, the path, relative to `watch.javascriptDir` where this ember app's test assets live
 * `apps.testAppFactory`, a string, the location, relative to `testLocation`, where a file exporting a function capable of generating a test-ready version of this ember app is located
