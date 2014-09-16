@@ -101,19 +101,25 @@ testemSimple: {
 The configuration for all the ember applications in your project.  Can be just a single app.
 #####apps.testLocation `string`
 The path, relative to `watch.javascriptDir` where this ember app's test assets live
-
-
-
-* `apps`, an array of objects, configuration for all the ember applications in your project.  Can be just a single app.
-* `apps.testLocation`, a string, the path, relative to `watch.javascriptDir` where this ember app's test assets live
-* `apps.testAppFactory`, a string, the location, relative to `testLocation`, where a file exporting a function capable of generating a test-ready version of this ember app is located
-* `apps.requireConfig`, an object or function, the configuration used by require.js in your tests for this app. By default this does not need to be provided. `ember-test` will derive this from your project. To see what it derives, look at `.mimosa/emberTest/test-variables.js`. If an object is provided, it will be used instead of the derived config. If a function is provided, that function will be called and provided the derived config. This gives you a chance to just tweak a few properties if that is all that is needed.
-* `bowerTestAssets`, a boolean, when set to `true` this module will attempt to use mimosa-bower to load in vendor test assets
-* `emberAMDPath`, a string, the AMD path for ember, which is often aliased to `"ember"`, so that is the default
-* `executeDuringBuild`, a boolean, determines whether mimosa will automatically execute the tests during build.
-* `executeDuringWatch`, a boolean, determines whether mimosa will automatically execute the tests during watch as files are changed.  Defaults to being off as ember tests can run slowly.
-* `safeAssets`: You may choose to alter the assets that Mimosa writes, for instance to use your own version of qunit.  Mimosa by default will overwrite the files in this folder.  If you don't want your file overwritten, add the name of the file to this array.  Just the name, no paths necessary.
-* `specConvention`, a regex, this is the regex `ember-test` uses to identify your tests. It'll run this regex against every compiled file to determine if it is indeed a test and if it is, `ember-test` will include it in the list of tests to be run.
-*  `assetFolder`, a string, the folder `ember-test` places its assets. It is relative to the root of your project.
-*  `testemConfig`, an object, testem configuration that `ember-test` uses as default. This default defines the browsers to run the tests in. `ember-test` amplifies this with a few other computed properties
-* `testemSimple`: `ember-test` wraps the [mimosa-testem-simple](https://github.com/dbashford/mimosa-testem-simple) module. It overrides the `testemSimple.configFile` property to point the `testem.json` files it creates.  The other testem-simple config can be updated/modified directly. The [config for testem-simple](https://github.com/dbashford/mimosa-testem-simple#default-config) allows you to tweak how testem is run.
+#####apps.testAppFactory `string`
+The path, relative to `testLocation`, where a file exporting a function capable of generating a test-ready version of this ember app is located
+#####apps.requireConfig `object or function`
+The configuration used by require.js in your tests for this app. By default this does not need to be provided. `ember-test` will derive this from your project. To see what it derives, look at `.mimosa/emberTest/test-variables.js`. If an object is provided, it will be used instead of the derived config. If a function is provided, that function will be called and provided the derived config. This gives you a chance to just tweak a few properties if that is all that is needed.
+#####bowerTestAssets `boolean`
+When set to `true` this module will attempt to use mimosa-bower to load in vendor test assets
+#####emberAMDPath `string`
+The AMD path for ember. This is often aliased to `"ember"`, so that is the default
+#####executeDuringBuild `boolean`
+Determines whether mimosa will automatically execute the tests during build.
+#####executeDuringWatch `boolean`
+Determines whether mimosa will automatically execute the tests during watch as files are changed. Once a decent number of tests exist for your project, you may not want this to be set to `true` as tests can take awhile.
+#####safeAssets `array of file names`
+You may choose to alter the assets that Mimosa writes, for instance to use your own version of qunit.  Mimosa by default will overwrite the files in this folder.  If you don't want your file overwritten, add the name of the file to this array.  Just the name, no paths necessary.
+#####specConvention `regex`
+This is the regex `ember-test` uses to identify your tests. It'll run this regex against every compiled file to determine if it is indeed a test and if it is, `ember-test` will include it in the list of tests to be run.
+#####assetFolder `string`
+The folder `ember-test` places its assets. It is relative to the root of your project.
+#####testemConfig `object`
+Testem configuration that `ember-test` uses as default. This default defines the browsers to run the tests in. `ember-test` amplifies this with a few other computed properties
+#####testemSimple `object`
+`ember-test` wraps the [mimosa-testem-simple](https://github.com/dbashford/mimosa-testem-simple) module. It overrides the `testemSimple.configFile` property to point the `testem.json` files it creates.  The other testem-simple config can be updated/modified directly. The [config for testem-simple](https://github.com/dbashford/mimosa-testem-simple#default-config) allows you to tweak how testem is run.
