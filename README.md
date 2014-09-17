@@ -86,7 +86,7 @@ You will want to run this in conjunction with mimosa running (`mimosa watch`), s
 
 This will launch the tests in the browsers configured for continuous integration (PhantomJS by default).
 
-#### Running tests for multiple apps
+#### Running Tests for Multiple Apps
 
 If you have configured `emberTest` for multiple Ember applications within your project, you can run the script to execute the tests for one app at a time:
 
