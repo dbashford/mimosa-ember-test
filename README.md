@@ -13,7 +13,7 @@ This module incorporates [QUnit](http://qunitjs.com/), [ember-qunit](https://git
 
 For more information regarding Mimosa, see http://mimosa.io
 
-NOTE: This module requires Mimosa `2.3.14` to function properly, if this is an issue, please file a GitHub request to address.
+NOTE: This module requires Mimosa `2.3.14` to function properly. If this is an issue, please file a GitHub request to address.
 
 ## Usage
 
@@ -28,7 +28,7 @@ NOTE: This module requires Mimosa `2.3.14` to function properly, if this is an i
 
 ### Vendor Assets
 
-`ember-test` expects [QUnit](http://qunitjs.com/),  [ember-qunit](https://github.com/rwjblue/ember-qunit), [Sinon](http://sinonjs.org/), and require.js to be available. `ember-test` fabricates test runners and test scaffolding that depends on those libraries.
+`ember-test` expects [QUnit](http://qunitjs.com/), [ember-qunit](https://github.com/rwjblue/ember-qunit), [Sinon](http://sinonjs.org/), and require.js to be available. `ember-test` fabricates test runners and test scaffolding that depends on those libraries.
 
 By default, `ember-test` will use Bower to incorporate those vendor test assets.  This module understands how [mimosa-bower](https://github.com/dbashford/mimosa-bower) works, and coordinates with mimosa-bower to get these specific tests assets into the right location inside `.mimosa/emberTest`.  If you do not change the default away from Bower, `ember-test` will verify you have a `bower.json` and check that file to make sure the right libraries are present.  If they are _not_, `ember-test` will stop Mimosa from starting up with a validation error.
 
@@ -62,20 +62,42 @@ When `mimosa build` starts up `ember-test` will write all the assets and execute
 
 ### mimosa testscript
 
-The `testscript` command will drop a platform appropriate script in the root of your project that you can use to execute your testem tests directly.  If you are writing tests or doing heavy test debugging, you will want to interact with testem directly and the script lets you do that.
+Executing `mimosa testscript` at the root of your project will drop a platform appropriate script named `test.sh` or `test.bat` that you can use to execute your testem tests directly.
 
-You will want to run this in conjunction with mimosa running (`mimosa watch`), so that you tests get compiled/copied to the correct location and the configuration gets updated.  To run both `watch` and execute your tests, try `mimosa watch & ./test.sh`.
+Run `mimosa testscript --help` to see available options.
 
-The script will be named test.[bat/sh]. The script takes a single option of ci.  When ci is passed in, testem will run in ci mode.
+NOTE: You will need to have Testem installed prior to running the generated script: `npm install -g testem`.
 
-```
-mimosa testscript
-```
+#### Running Tests in Development Mode
 
 ```
-test.sh
-test.sh ci
+./test.sh
 ```
+
+This will launch the tests in the browsers configured for development (Chrome and Firefox by default) and let you interact directly with Testem's [text-based UI](https://github.com/airportyh/testem#development-mode).
+
+You will want to run this in conjunction with mimosa running (`mimosa watch`), so that your tests get compiled/copied to the correct location and the configuration gets updated.  To run both `watch` and execute your tests, try `mimosa watch & ./test.sh`.
+
+#### Running Tests in Continous Integration Mode
+
+```
+./test.sh ci
+```
+
+This will launch the tests in the browsers configured for continuous integration (PhantomJS by default).
+
+#### Running Tests for Multiple Apps
+
+If you have configured `emberTest` for multiple Ember applications within your project, you can run the script to execute the tests for one app at a time:
+
+```
+Usage: ./test.sh [test_number]
+
+[1] test configuration for one app
+[2] test configuration for another app
+```
+
+In CI mode, mimosa will run the tests for each application in sequence.
 
 ## Default Config
 
