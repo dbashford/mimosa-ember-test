@@ -1,6 +1,6 @@
 {
   "name": "mimosa-ember-test",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/dbashford/mimosa-ember-test",
   "author": "David Bashford",
   "description": "A Mimosa module for testing Ember apps",
