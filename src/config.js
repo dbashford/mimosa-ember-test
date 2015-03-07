@@ -32,48 +32,6 @@ exports.defaults = function() {
   return defs;
 };
 
-exports.placeholder = function() {
-  var ph = testemSimple.placeholder().replace( "testem.json", ".mimosa/emberTest/testem.json" ) +
-    "\n\n  emberTest:                  # Configuration for the ember-test module\n" +
-    "    bowerTestAssets: true         # Whether or not to use bower to bring in test assets\n" +
-    "                                  # like qunit, sinon, require.js and ember-qunit\n" +
-    "    apps:[{                       # configuration for each ember app in your project\n" +
-    "      testLocation: \"tests\"       # The path, relative to watch.javascriptDir where this\n" +
-    "                                  # ember app's test assets live.\n" +
-    "      testAppFactory: \"create_test_app\"  # Location, relative to testLocation, where a file\n" +
-    "                                  # exporting a function capable of generating a test-ready\n" +
-    "                                  # version of this ember app is located\n" +
-    "      stylesheetPaths: []         # Paths to stylesheets necessary to properly run integration\n" +
-    "                                  # tests for this app. Example: \"/public/stylesheets/vendor.css\"\n" +
-    "      requireConfig: null         # RequireJS configuration. By default the mimosa-require\n" +
-    "                                  # module is used by mimosa-ember-test to derive a\n" +
-    "                                  # requirejs config. But if that derived config isn't right\n" +
-    "                                  # a config can be pasted here. This parameter takes either\n" +
-    "                                  # an object which overrides the requirejs config, or a function\n" +
-    "                                  # which takes the inferred config as input which allow it to be\n" +
-    "                                  # modified before it is used/included\n" +
-    "    }]\n" +
-    "    emberAMDPath: \"ember\"       # AMD path to ember.\n" +
-    "    executeDuringBuild            # If true the tests will get executed during build.\n" +
-    "    executeDuringWatch            # If true the tests will get executed during watch\n" +
-    "                                  # with each file change.\n" +
-    "    specConvention: /[_-](spec|test)\.js$/ # Convention for how test specs are named\n" +
-    "    assetFolder: \".mimosa/emberTest\"     # Path from the root of the project to the folder that\n" +
-    "                                  # will contain all the testing assets that the emberTest\n" +
-    "                                  # module maintains and writes. If the folder does not exist\n" +
-    "                                  # it will be created.\n" +
-    "    safeAssets: []                # An array of file names ember-test will not overwrite.\n" +
-    "                                  # By default ember-test overwrites any file it outputs.\n" +
-    "                                  # So, for instance, if you have a specific version of\n" +
-    "                                  # \"mocha.js\" you need to use, this setting should be [\"mocha.js\"]\n" +
-    "    testemConfig:                 # Pass through values for the testem.json configuration.\n" +
-    "                                  # The module will write the testem.json for you\n" +
-    "      \"launch_in_dev\": [\"Firefox\", \"Chrome\"] # In dev mode launches in Firefox and Chrome\n" +
-    "      \"launch_in_ci\": [\"PhantomJS\"]          # In CI mode uses PhantomJS (must be installed)\n";
-
-  return ph;
-};
-
 var _determineIfRequireModuleNeeded = function( config, errors ) {
   var hasRequire = config.modules.some( function( mod ) {
     mod = mod.split("@").shift();

@@ -37,15 +37,19 @@ var _test = function( config, opts ) {
   logger.info( "To execute the test script, you will need to have testem installed globally. npm install -g testem" );
 };
 
-var register = function( program, retrieveConfig ) {
+var register = function( program, _logger, retrieveConfig ) {
+  logger = _logger;
   program
     .command( "testscript" )
     .description( "Create a script in the root directory that will launch testem tests" )
     .option( "-b, --bash",    "force the generation of a bash script" )
     .option( "-w, --windows", "force the generation of a windows script" )
     .action( function( opts ) {
-      retrieveConfig( false, false, function( config ) {
-        logger = config.log;
+      var retrieveConfigOpts = {
+        mdebug: false,
+        buildFirst: false
+      };
+      retrieveConfig( retrieveConfigOpts, function( config ) {
         _test( config, opts );
       });
     }).on( "--help", function() {
