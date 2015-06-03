@@ -36,6 +36,7 @@ var _buildTestMain = function( mimosaConfig, options, app ) {
 
   var file = path.join( mimosaConfig.emberTest.assetFolderFull, app.testLocation, "test-main.js" );
   var output = testMainTemplate({
+    testLocation: app.testLocation,
     emberPath: mimosaConfig.emberTest.emberAMDPath,
     testApp: [ app.testLocation, app.testAppFactory ].join("/")
   });
