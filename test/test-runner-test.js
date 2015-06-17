@@ -34,6 +34,8 @@ describe("When starting up with one app application", function() {
     var runnerText = fs.readFileSync( assetPath, "utf8" )
     expect( runnerText.indexOf("sinon.js") ).to.be.above(500);
     expect( runnerText.indexOf("qunit.js") ).to.be.above(500);
+    expect( runnerText.indexOf("chai.js") ).to.be.above(500);
+    expect( runnerText.indexOf("chai-qunit.js") ).to.be.above(500);
     expect( runnerText.indexOf("test-variables.js") ).to.be.above(500);
   });
 });
@@ -71,11 +73,15 @@ describe("When starting up with a two apps project", function() {
     var runnerText = fs.readFileSync( assetPath, "utf8" )
     expect( runnerText.indexOf("sinon.js") ).to.be.above(500);
     expect( runnerText.indexOf("qunit.js") ).to.be.above(500);
+    expect( runnerText.indexOf("chai.js") ).to.be.above(500);
+    expect( runnerText.indexOf("chai-qunit.js") ).to.be.above(500);
     expect( runnerText.indexOf("test-variables.js") ).to.be.above(500);
 
     var runnerText2 = fs.readFileSync( assetPath2, "utf8" )
     expect( runnerText2.indexOf("sinon.js") ).to.be.above(500);
     expect( runnerText2.indexOf("qunit.js") ).to.be.above(500);
+    expect( runnerText.indexOf("chai.js") ).to.be.above(500);
+    expect( runnerText.indexOf("chai-qunit.js") ).to.be.above(500);
     expect( runnerText2.indexOf("test-variables.js") ).to.be.above(500);
   });
 });

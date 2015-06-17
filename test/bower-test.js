@@ -34,6 +34,8 @@ var test = function( config, desc ) {
         "require.js",
         "sinon.js",
         "ember-qunit",
+        "chai.js",
+        "chai-qunit.js",
         path.join("ember-qunit", "main.js"),
         path.join("ember-qunit", "test.js")
       ].forEach( function( p ) {

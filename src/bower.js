@@ -22,6 +22,12 @@ var _updateBowerConfig = function ( config ) {
     },
     "ember-qunit": {
       "dist/amd": assetFolder + "/ember-qunit"
+    },
+    chai: {
+      "chai.js": assetFolder + "/chai.js"
+    },
+    "chai-qunit": {
+      "dist/globals/main.js": assetFolder + "/chai-qunit.js"
     }
   };
 

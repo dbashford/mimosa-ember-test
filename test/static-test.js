@@ -32,6 +32,8 @@ describe("When using module-stored static assets", function() {
       "require.js",
       "sinon.js",
       "ember-qunit",
+      "chai.js",
+      "chai-qunit.js",
       path.join("ember-qunit", "main.js"),
       path.join("ember-qunit", "test.js")
     ].forEach( function( p ) {

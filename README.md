@@ -9,7 +9,7 @@ Client JavaScript testing requires a good deal of configuration to set up, as we
 
 The goal of this module is to keep test setup to a minimum. Out of the box it requires no configuration. The module writes its own configuration derived from your project. In most cases you can include the module and start writing tests.
 
-This module incorporates [QUnit](http://qunitjs.com/), [ember-qunit](https://github.com/rwjblue/ember-qunit), [Sinon](http://sinonjs.org/), [Testem](https://github.com/airportyh/testem) and [PhantomJS](http://phantomjs.org/).
+This module incorporates [QUnit](http://qunitjs.com/), [ember-qunit](https://github.com/rwjblue/ember-qunit), [Chai](https://github.com/chaijs/chai), [chai-qunit](https://github.com/fivetanley/chai-qunit), [Sinon](http://sinonjs.org/), [Testem](https://github.com/airportyh/testem) and [PhantomJS](http://phantomjs.org/).
 
 For more information regarding Mimosa, see http://mimosa.io
 
@@ -28,7 +28,7 @@ NOTE: This module requires Mimosa `2.3.14` to function properly. If this is an i
 
 ### Vendor Assets
 
-`ember-test` expects [QUnit](http://qunitjs.com/), [ember-qunit](https://github.com/rwjblue/ember-qunit), [Sinon](http://sinonjs.org/), and require.js to be available. `ember-test` fabricates test runners and test scaffolding that depends on those libraries.
+`ember-test` expects [QUnit](http://qunitjs.com/), [ember-qunit](https://github.com/rwjblue/ember-qunit), [Chai](https://github.com/chaijs/chai), [chai-qunit](https://github.com/fivetanley/chai-qunit), [Sinon](http://sinonjs.org/), and require.js to be available. `ember-test` fabricates test runners and test scaffolding that depends on those libraries.
 
 By default, `ember-test` will use Bower to incorporate those vendor test assets.  This module understands how [mimosa-bower](https://github.com/dbashford/mimosa-bower) works, and coordinates with mimosa-bower to get these specific tests assets into the right location inside `.mimosa/emberTest`.  If you do not change the default away from Bower, `ember-test` will verify you have a `bower.json` and check that file to make sure the right libraries are present.  If they are _not_, `ember-test` will stop Mimosa from starting up with a validation error.
 
@@ -39,7 +39,9 @@ The following is an example of the update necessary for your `bower.json`. If yo
   "qunit": "1.14.0",
   "requirejs": "2.1.14",
   "sinonjs": "1.10.2",
-  "ember-qunit":"0.1.8"
+  "ember-qunit":"0.1.8",
+  "chai": "3.0.0",
+  "chai-qunit":"0.2.1"
 }
 ```
 
