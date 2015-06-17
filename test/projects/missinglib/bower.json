@@ -7,6 +7,8 @@
   "devDependencies": {
     "qunit": "1.14.0",
     "requirejs": "2.1.14",
-    "ember-qunit":"0.1.8"
+    "ember-qunit":"0.1.8",
+    "chai": "3.0.0",
+    "chai-qunit":"0.2.1"
   }
 }

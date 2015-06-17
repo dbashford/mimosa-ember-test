@@ -31,6 +31,12 @@
 
     <script src="/ember-test/vendor/qunit.js"></script>
     <script src="/ember-test/vendor/sinon.js"></script>
+    <script src="/ember-test/vendor/chai.js"></script>
+    <script src="/ember-test/vendor/chai-qunit.js"></script>
+    <script>
+      chaiQUnit.globalize();
+    </script>
+
     <script src="/ember-test/vendor/require.js"></script>
     <script src="test-variables.js"></script>
     <script src="test-main.js"></script>
