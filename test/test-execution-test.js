@@ -28,7 +28,6 @@ describe("When building with one app application", function() {
   });
 
   it( 'the tests will be executed', function() {
-    console.log(standardOut)
     expect( standardOut.indexOf("# tests 4\n# pass  4\n# fail  0") ).to.be.above(5000)
   });
 });
