@@ -18,7 +18,7 @@ var _updateBowerConfig = function ( config ) {
       "require.js": assetFolder + "/require.js"
     },
     sinonjs: {
-      "sinon.js": assetFolder + "/sinon.js"
+      "index.js": assetFolder + "/sinon.js"
     },
     "ember-qunit": {
       "dist/amd": assetFolder + "/ember-qunit"
@@ -119,7 +119,7 @@ exports.handleBower = function( config, errors ) {
           return;
         }
 
-        ["qunit", "requirejs", "sinonjs", "ember-qunit"].forEach( function( bowerLib ) {
+        ["qunit", "requirejs", "sinonjs", "ember-qunit", "qunit", "chai-qunit"].forEach( function( bowerLib ) {
           var dependencies = bowerJSON.dependencies || {};
           var devDependencies = bowerJSON.devDependencies || {};
 
