@@ -8,7 +8,7 @@ exports.config = {
     'bower',
     'copy',
     'es6-module-transpiler',
-    'ember-handlebars'
+    'ember-handlebars@2.0.1'
   ],
   emberTest: {
     apps: [{

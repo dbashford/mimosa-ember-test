@@ -4,7 +4,7 @@ var exec  = require('child_process').exec
   , fs = require( 'fs' );
 
 describe("When building with one app application", function() {
-  this.timeout(15000);
+  this.timeout(35000);
 
   var env = utils.setupProjectData( "testem-simple" );
   var et = env.dotEmberTest;

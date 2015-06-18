@@ -40,6 +40,9 @@ var _determineIfRequireModuleNeeded = function( config, errors ) {
 
   // nothing to check
   if ( hasRequire ) {
+    if (config.require.safeDeps) {
+      config.require.safeDeps.push("ember-qunit");
+    }
     return;
   }
 

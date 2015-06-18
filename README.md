@@ -15,6 +15,8 @@ For more information regarding Mimosa, see http://mimosa.io
 
 NOTE: This module requires Mimosa `2.3.14` to function properly. If this is an issue, please file a GitHub request to address.
 
+NOTE: Version `1.0.0` of this module requires version `3.2.0` of mimosa-require.  Update your `modules` to `require@3.2.0`. If you can't use `3.2.0`, that is ok, but validation errors (that will likely not really be errors) might become a nuisance.
+
 ## Usage
 
 * `npm install -g phantomjs` (If you are on Windows, this will not install phantomjs properly. You will need to [download phantomjs from the site](http://phantomjs.org/download.html) and add the executable to your `PATH`)

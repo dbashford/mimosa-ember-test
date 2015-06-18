@@ -3,18 +3,16 @@ QUnit.config.autostart = false;
 require.config(Mimosa.EmberTest.requireConfig);
 
 require(['<%= emberPath %>'], function(Ember) {
+  Ember.default = Ember;
   require.config({ 'baseUrl': '/ember-test' });
-  require(['vendor/ember-qunit/main'], function(EmberQUnit) {
-    EmberQUnit.globalize();
-
+  require(['vendor/ember-qunit'], function() {
     require.config({ 'baseUrl': '/js' });
-    require(['<%= testApp %>', '../testem'], function(testApp) {
+    require(['<%= testApp %>', 'ember-qunit', '../testem'], function(testApp, emberQUnit) {
       window.Testem.on('all-test-results', function() {
         console.log('tests complete: <%= testLocation %>');
       });
       testApp = testApp['default'] || testApp;
-      setResolver(Ember.DefaultResolver.create({ namespace: testApp() }));
-
+      emberQUnit.setResolver(Ember.DefaultResolver.create({ namespace: testApp() }));
       require(Mimosa.EmberTest.specFiles, function() {
         QUnit.start();
       });

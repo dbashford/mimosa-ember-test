@@ -31,11 +31,9 @@ describe("When using module-stored static assets", function() {
       "qunit.js",
       "require.js",
       "sinon.js",
-      "ember-qunit",
+      "ember-qunit.js",
       "chai.js",
-      "chai-qunit.js",
-      path.join("ember-qunit", "main.js"),
-      path.join("ember-qunit", "test.js")
+      "chai-qunit.js"
     ].forEach( function( p ) {
         var assetPath = path.join( et, "vendor", p );
         expect(fs.existsSync( assetPath ) ).to.be.true;
