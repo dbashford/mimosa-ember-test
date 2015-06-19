@@ -37,6 +37,10 @@
       chaiQUnit.globalize();
     </script>
 
+    <% for (var i = 0; i < javascriptPaths.length; i++) { %>
+        <script src="<%= javascriptPaths[i] %>"></script>
+    <% } %>
+
     <script src="/ember-test/vendor/require.js"></script>
     <script src="test-variables.js"></script>
     <script src="test-main.js"></script>

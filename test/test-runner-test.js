@@ -117,3 +117,36 @@ describe("When starting up with one app application", function() {
 
 });
 
+describe("When starting up with one app application", function() {
+  this.timeout(15000);
+
+  var env = utils.setupProjectData( "test-runner-javascript" );
+  var et = env.dotEmberTest;
+  var assetPath = path.join ( et, "tests", "runner.html" );
+
+  before(function(done){
+    utils.cleanProject( env );
+    utils.setupProject( env, "withbower" );
+
+    var cwd = process.cwd();
+    process.chdir( env.projectDir );
+    exec( "mimosa build", function ( err, sout, serr ) {
+      done();
+      process.chdir(cwd);
+    });
+  });
+
+  after(function() {
+    utils.cleanProject( env );
+  });
+
+  it( 'the test runner will have references to the proper javascripts', function() {
+    var runnerText = fs.readFileSync( assetPath, "utf8" );
+    expect( runnerText.indexOf("foo/bar/baz.js") ).to.eql(945);
+    expect( runnerText.indexOf("uber/conf/rulez.js") ).to.eql(997);
+  });
+
+});
+
+
+

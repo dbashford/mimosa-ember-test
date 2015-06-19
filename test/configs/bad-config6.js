@@ -4,9 +4,10 @@ exports.config = {
       testLocation: null,
       testAppFactory: null,
       stylesheetPaths: null,
+      javascriptPaths: null,
       requireConfig: null
     }]
-  },    
+  },
   modules: [
     'ember-test'
   ],

@@ -14,6 +14,7 @@ exports.defaults = function() {
     apps: [{
       testLocation: "tests",
       testAppFactory: "create_test_app",
+      javascriptPaths: [],
       stylesheetPaths: [],
       requireConfig: null
     }],
@@ -134,6 +135,7 @@ exports.validate = function( config, validators ) {
           }
 
           validators.ifExistsIsArrayOfStrings( errors, "emberTest.apps.stylesheetPaths", app.stylesheetPaths );
+          validators.ifExistsIsArrayOfStrings( errors, "emberTest.apps.javascriptPaths", app.javascriptPaths );
         });
       }
     }

@@ -3,7 +3,8 @@ exports.config = {
     apps: [{
       testLocation: "tests",
       testAppFactory: "foo",
-      stylesheetPaths: ["foo", "bar"]
+      stylesheetPaths: ["foo", "bar"],
+      javascriptPaths: ["foo", "bar"]
     }]
   },
   modules: [

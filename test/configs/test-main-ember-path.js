@@ -7,6 +7,7 @@ exports.config = {
       testLocation: "tests",
       testAppFactory: "create_test_app",
       stylesheetPaths: [],
+      javascriptPaths: [],
       requireConfig: {}
     }],
     emberAMDPath: "emberrrr"

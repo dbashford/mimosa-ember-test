@@ -7,8 +7,9 @@ exports.config = {
       testLocation: "tests",
       testAppFactory: "create_test_app",
       stylesheetPaths: [],
+      javascriptPaths: [],
       requireConfig: function( requireConfig ) {
-        requireConfig.yeah = "OK";        
+        requireConfig.yeah = "OK";
       }
     }],
     executeDuringBuild: false

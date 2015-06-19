@@ -3,6 +3,7 @@ exports.config = {
     apps: [{
       testLocation: "foo",
       testAppFactory: "foo",
+      javascriptPaths: [1, 2],
       stylesheetPaths: [1, 2],
       requireConfig: {}
     }]

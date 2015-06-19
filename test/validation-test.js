@@ -102,7 +102,8 @@ var expected5 =
   " * emberTest.apps.requireConfig must be a function or an object.\n" +
   " * emberTest.apps.testLocation must be a string.\n" +
   " * emberTest.apps.testAppFactory must be a string.\n" +
-  " * emberTest.apps.stylesheetPaths must be an array. \n";
+  " * emberTest.apps.stylesheetPaths must be an array.\n" +
+  " * emberTest.apps.javascriptPaths must be an array. \n";
 test("bad-config5", "when all app data is bad, 5", expected5);
 
 var expected6 =
@@ -112,7 +113,8 @@ test("bad-config6", "when all app data is null, 6", expected6);
 
 var expected7 =
   " * emberTest.apps.testLocation does not exist, resolved to " + path.join(__dirname, 'bad-config7/assets/javascripts/foo') + ".\n" +
-  " * emberTest.apps.stylesheetPaths must be an array of strings. \n";
+  " * emberTest.apps.stylesheetPaths must be an array of strings.\n" +
+  " * emberTest.apps.javascriptPaths must be an array of strings. \n";
 test("bad-config7", "when paths are bad, 7", expected7);
 
 var expected8 =

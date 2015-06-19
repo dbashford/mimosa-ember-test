@@ -38,10 +38,10 @@ The following is an example of the update necessary for your `bower.json`. If yo
 
 ```javascript
 "devDependencies": {
-  "qunit": "1.14.0",
+  "qunit": "1.18.0",
   "requirejs": "2.1.14",
-  "sinonjs": "1.10.2",
-  "ember-qunit":"0.1.8",
+  "sinonjs": "http://sinonjs.org/releases/sinon-1.15.0.js",
+  "ember-qunit-builds":"0.4.0",
   "chai": "3.0.0",
   "chai-qunit":"0.2.1"
 }
@@ -110,6 +110,7 @@ emberTest: {
   apps: [{
     testLocation: "tests",
     testAppFactory: "create_test_app",
+    javascriptsPaths: [],
     stylesheetPaths: [],
     requireConfig: null
   }],
@@ -140,6 +141,10 @@ The configuration for all the ember applications in your project.  Can be just a
 The path, relative to `watch.javascriptDir` where this ember app's test assets live
 #####apps.testAppFactory `string`
 The path, relative to `testLocation`, where a file exporting a function capable of generating a test-ready version of this ember app is located
+#####apps.javascriptPaths `array of strings`
+The paths, relative to the root of the project, of any additional javascript files that need to be included in the test runner.
+#####apps.stylesheetPaths `array of strings`
+The paths, relative to the root of the project, of any additional stylesheets that need to be included in the test runner.
 #####apps.requireConfig `object or function`
 The configuration used by require.js in your tests for this app. By default this does not need to be provided. `ember-test` will derive this from your project. To see what it derives, look at `.mimosa/emberTest/test-variables.js`. If an object is provided, it will be used instead of the derived config. If a function is provided, that function will be called and provided the derived config. This gives you a chance to just tweak a few properties if that is all that is needed.
 #####bowerTestAssets `boolean`

@@ -1,0 +1,15 @@
+{
+  "name": "MimosaEmberSkeleton",
+  "version": "0.0.1",
+  "dependencies": {
+    "requirejs": "2.1.14"
+  },
+  "devDependencies": {
+    "qunit": "1.18.0",
+    "requirejs": "2.1.14",
+    "sinonjs": "http://sinonjs.org/releases/sinon-1.15.0.js",
+    "ember-qunit-builds":"0.4.0",
+    "chai": "3.0.0",
+    "chai-qunit":"0.2.1"
+  }
+}

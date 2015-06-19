@@ -3,10 +3,11 @@ exports.config = {
     apps: [{
       testLocation: 1,
       testAppFactory: 1,
+      javascriptPaths: 1,
       stylesheetPaths: 1,
       requireConfig: 1
     }]
-  },  
+  },
   modules: [
     'ember-test'
   ],
